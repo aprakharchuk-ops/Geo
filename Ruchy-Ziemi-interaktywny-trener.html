@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ruchy Ziemi — interaktywne materiały do nauki</title>
+<style>
+:root{
+  --navy:#0d1535; --navy2:#161f4a; --deep:#070c23; --card:#131c42;
+  --gold:#ffc83d; --gold2:#ffa41b; --sun:#ffd95e;
+  --cyan:#49d6e8; --green:#4ade80; --pink:#ff7ab8; --violet:#a78bfa;
+  --red:#ff6b6b; --ink:#eaf0ff; --dim:#9aa7d0; --line:#2a3566;
+  --ok:#2ecc71; --bad:#ff5e5e;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:66px}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  background:var(--deep);color:var(--ink);line-height:1.55;-webkit-text-size-adjust:100%;
+  background-image:radial-gradient(circle at 12% 8%,rgba(167,139,250,.18),transparent 42%),
+                   radial-gradient(circle at 88% 22%,rgba(73,214,232,.14),transparent 45%),
+                   radial-gradient(circle at 50% 95%,rgba(255,200,61,.10),transparent 50%);
+  background-attachment:fixed}
+h1,h2,h3,h4{margin:0;line-height:1.25}
+p{margin:0 0 10px}
+b{color:var(--gold)}
+em{color:var(--cyan);font-style:normal;font-weight:600}
+button{font-family:inherit}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;text-align:center;padding:34px 18px 30px;
+  background:linear-gradient(160deg,#121c4d 0%,#0a1130 55%,#070c23 100%);border-bottom:1px solid var(--line)}
+.stars{position:absolute;inset:0;pointer-events:none}
+.stars i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.7;animation:tw 3s infinite}
+@keyframes tw{0%,100%{opacity:.18}50%{opacity:.95}}
+.hero .planet{font-size:46px;line-height:1;filter:drop-shadow(0 0 14px rgba(255,200,61,.5))}
+.hero h1{font-size:34px;font-weight:800;margin:8px 0 8px;
+  background:linear-gradient(90deg,var(--gold),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .sub{font-size:15px;color:var(--dim);max-width:640px;margin:0 auto}
+.hero .tag{display:inline-block;margin-top:14px;font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;
+  background:rgba(255,200,61,.12);border:1px solid rgba(255,200,61,.42);color:var(--gold);border-radius:999px;padding:6px 16px}
+.hero .quick{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.hero .quick b{display:block;font-size:20px;color:var(--gold)}
+.hero .quick div{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;padding:8px 14px;font-size:11px;color:var(--dim)}
+
+/* ---------- nav ---------- */
+nav{position:sticky;top:0;z-index:60;background:rgba(7,12,35,.93);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);padding:8px 10px;overflow-x:auto;white-space:nowrap}
+nav .inner{max-width:1080px;margin:0 auto;display:flex;gap:6px;justify-content:center;min-width:max-content}
+nav a{font-size:12.5px;font-weight:600;text-decoration:none;color:var(--ink);background:rgba(255,255,255,.05);
+  border:1px solid var(--line);border-radius:999px;padding:6px 13px;transition:.15s}
+nav a:hover{background:var(--gold);color:#13193a;border-color:var(--gold)}
+nav a.on{background:rgba(255,200,61,.18);border-color:var(--gold);color:var(--gold)}
+nav a:focus-visible,.mcard:focus-visible,.fc:focus-visible,.chk li:focus-visible,button:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 80px}
+section{padding:40px 0 6px}
+.shead{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap;margin-bottom:5px}
+.shead .ico{font-size:26px}
+.shead h2{font-size:24px;font-weight:800;color:#fff}
+.shead .tip{font-size:12.5px;color:var(--dim);font-style:italic}
+.srule{height:3px;background:linear-gradient(90deg,var(--gold),var(--cyan),transparent);border-radius:3px;margin:9px 0 20px}
+
+.card{background:linear-gradient(170deg,rgba(255,255,255,.055),rgba(255,255,255,.02));
+  border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 22px rgba(0,0,0,.3)}
+.btn{font-size:13px;padding:9px 16px;border:1px solid var(--gold);background:var(--gold);color:#13193a;
+  border-radius:10px;cursor:pointer;font-weight:700;transition:.15s}
+.btn:hover{background:var(--gold2);border-color:var(--gold2)}
+.btn.ghost{background:rgba(255,255,255,.05);color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{background:rgba(255,255,255,.12);color:#fff}
+.btn.cy{background:var(--cyan);border-color:var(--cyan);color:#06243a}
+.btn.sm{font-size:12px;padding:6px 12px}
+.btn:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.hidden{display:none!important}
+.muted{color:var(--dim);font-size:12.5px}
+
+/* slider */
+.slider{width:100%;-webkit-appearance:none;appearance:none;height:8px;border-radius:99px;
+  background:linear-gradient(90deg,#1b2a66,var(--cyan));outline:none;margin:6px 0}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--gold);
+  border:3px solid #fff;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.slider::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--gold);border:3px solid #fff;cursor:pointer}
+
+/* chips */
+.chip{font-size:12px;font-weight:700;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--dim);
+  border-radius:999px;padding:6px 13px;cursor:pointer;transition:.15s}
+.chip:hover{color:#fff;border-color:var(--cyan)}
+.chip.on{background:var(--cyan);color:#06243a;border-color:var(--cyan)}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+
+/* ---------- tematy ---------- */
+.topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.topic{background:linear-gradient(170deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+  border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:14px;padding:15px 17px}
+.topic.c2{border-left-color:var(--cyan)} .topic.c3{border-left-color:var(--green)} .topic.c4{border-left-color:var(--pink)}
+.topic h3{font-size:17px;color:#fff}
+.topic .pg{font-size:11px;color:var(--dim);letter-spacing:.4px}
+.topic .intro{font-size:13px;color:var(--dim);margin:7px 0 10px}
+.topic ul{margin:0;padding-left:19px;font-size:13.3px}
+.topic li{margin-bottom:6px}
+.topic .more{font-size:12px;color:var(--cyan);background:none;border:0;padding:5px 0;cursor:pointer;font-weight:700}
+
+/* ---------- mnemotechniki ---------- */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.mcard{perspective:1100px;height:210px;cursor:pointer}
+.mcard .in{position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+.mcard.flip .in{transform:rotateY(180deg)}
+.mcard .f,.mcard .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;padding:16px;
+  display:flex;flex-direction:column;justify-content:center;border:1px solid var(--line);overflow:auto}
+.mcard .f{background:linear-gradient(150deg,#1b2557,#121a42);text-align:center}
+.mcard .b{background:linear-gradient(150deg,#2a2150,#1a1340);transform:rotateY(180deg);border-color:#4a3a86}
+.mcard .ic{font-size:30px}
+.mcard .ti{font-size:15px;font-weight:800;color:var(--gold);margin:6px 0 4px}
+.mcard .hint{font-size:11.5px;color:var(--dim);margin-top:auto}
+.mcard .key{font-size:16px;font-weight:800;color:var(--cyan);line-height:1.4;margin-bottom:8px}
+.mcard .exp{font-size:12.6px;color:#dfe6ff}
+.mcard .exp b{color:var(--gold)}
+
+/* ---------- wizualizacje ---------- */
+.viz{background:linear-gradient(170deg,#0f1740,#0a1030);border:1px solid var(--line);border-radius:18px;padding:16px}
+.viz h3{font-size:16px;color:#fff;margin-bottom:3px}
+.viz .vtip{font-size:12px;color:var(--dim);margin-bottom:10px}
+.vrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,300px);gap:16px;align-items:start}
+@media(max-width:760px){.vrow{grid-template-columns:1fr}}
+.readout{background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px}
+.readout .big{font-size:26px;font-weight:800;color:var(--gold);line-height:1.1}
+.readout .lbl{font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--dim)}
+.readout hr{border:0;border-top:1px solid var(--line);margin:10px 0}
+.kv{display:flex;justify-content:space-between;gap:8px;font-size:12.6px;padding:3px 0}
+.kv span:last-child{color:var(--cyan);font-weight:700;text-align:right}
+svg{display:block;width:100%;height:auto;max-width:100%}
+
+.zonebtns{display:grid;grid-template-columns:1fr;gap:6px}
+.zonebtns button{text-align:left;font-size:12.5px;font-weight:700;border:1px solid var(--line);
+  background:rgba(255,255,255,.05);color:var(--ink);border-radius:10px;padding:8px 11px;cursor:pointer}
+.zonebtns button.on{border-color:var(--gold);background:rgba(255,200,61,.15)}
+.sw{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px;vertical-align:-1px}
+
+/* ---------- fiszki ---------- */
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:12px}
+.fc{perspective:1000px;height:165px;cursor:pointer}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.fc.flip .in{transform:rotateY(180deg)}
+.fc .f,.fc .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;padding:13px;
+  display:flex;align-items:center;justify-content:center;text-align:center;border:1px solid var(--line);overflow:auto}
+.fc .f{background:linear-gradient(150deg,#1a2355,#111a41);font-size:14.5px;font-weight:800;color:#fff}
+.fc .b{background:linear-gradient(150deg,#123a3f,#0c2b31);transform:rotateY(180deg);font-size:12.6px;color:#dff7fb;border-color:#1f6b74}
+.fc .cat{position:absolute;top:7px;left:10px;font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:var(--dim)}
+
+/* ---------- słowniczek ---------- */
+.searchbar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.searchbar input{flex:1;min-width:200px;background:rgba(0,0,0,.32);border:1px solid var(--line);color:var(--ink);
+  border-radius:10px;padding:10px 13px;font-size:13.5px;font-family:inherit;outline:none}
+.searchbar input:focus{border-color:var(--cyan)}
+.glist{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.gitem{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:11px 14px}
+.gitem h4{font-size:14px;color:var(--gold);margin-bottom:3px}
+.gitem p{font-size:12.6px;color:#d7deff;margin:0}
+.gcount{font-size:12px;color:var(--dim)}
+mark{background:rgba(255,200,61,.3);color:var(--gold);border-radius:3px}
+
+/* ---------- gry ---------- */
+.qbox{background:linear-gradient(170deg,rgba(255,255,255,.055),rgba(255,255,255,.02));
+  border:1px solid var(--line);border-radius:16px;padding:18px;min-height:230px}
+.qprog{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--dim);margin-bottom:8px}
+.pbar{height:7px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-bottom:14px}
+.pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--cyan));width:0;transition:width .3s}
+.qq{font-size:16.5px;font-weight:700;margin-bottom:13px;line-height:1.4}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;font-size:13.6px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink);
+  border-radius:11px;padding:11px 14px;cursor:pointer;transition:.12s}
+.opt:hover{border-color:var(--cyan);background:rgba(73,214,232,.1)}
+.opt.ok{background:rgba(46,204,113,.22);border-color:var(--ok);color:#c8ffdf}
+.opt.bad{background:rgba(255,94,94,.2);border-color:var(--bad);color:#ffd4d4}
+.opt:disabled{cursor:default}
+.fb{margin-top:13px;font-size:13px;padding:11px 13px;border-radius:11px;border-left:4px solid var(--cyan);
+  background:rgba(73,214,232,.1);color:#d6f6fb}
+.fb.good{border-left-color:var(--ok);background:rgba(46,204,113,.12);color:#cdf7df}
+.fb.bad{border-left-color:var(--bad);background:rgba(255,94,94,.1);color:#ffd9d9}
+.score{text-align:center;padding:12px}
+.score .big{font-size:46px;font-weight:800;color:var(--gold)}
+
+.pairs{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.pairs button{font-size:12.8px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink);
+  border-radius:10px;padding:10px;cursor:pointer;text-align:left;min-height:52px}
+.pairs button.sel{border-color:var(--gold);background:rgba(255,200,61,.16)}
+.pairs button.done{opacity:.32;cursor:default;border-color:var(--ok)}
+.pairs button.wrong{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+.gapq{font-size:16px;line-height:2.1;margin-bottom:12px}
+.gapq input{background:rgba(0,0,0,.35);border:1px solid var(--line);border-bottom:2px solid var(--gold);color:var(--gold);
+  font-weight:700;font-size:15px;font-family:inherit;border-radius:7px;padding:3px 8px;width:168px;outline:none;text-align:center}
+.gapq input.ok{border-color:var(--ok);color:#9cf5c2}
+.gapq input.bad{border-color:var(--bad);color:#ffb4b4}
+
+.ordbox{display:flex;flex-wrap:wrap;gap:7px;min-height:52px;padding:9px;border:1px dashed var(--line);border-radius:12px;margin-bottom:10px}
+.ordbox button{font-size:12.6px;font-weight:700;border:1px solid var(--line);background:rgba(255,255,255,.07);
+  color:var(--ink);border-radius:9px;padding:8px 12px;cursor:pointer}
+.ordbox button:hover{border-color:var(--gold)}
+.ordbox.target{background:rgba(73,214,232,.06);border-color:var(--cyan)}
+
+/* ---------- checklista ---------- */
+.chk{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.chk li{display:flex;gap:11px;align-items:flex-start;background:rgba(255,255,255,.04);border:1px solid var(--line);
+  border-radius:11px;padding:10px 13px;font-size:13.4px;cursor:pointer;transition:.13s}
+.chk li:hover{border-color:var(--cyan)}
+.chk li.on{background:rgba(46,204,113,.12);border-color:var(--ok)}
+.chk .box{flex:0 0 20px;height:20px;border:2px solid var(--line);border-radius:6px;font-size:13px;
+  display:flex;align-items:center;justify-content:center;color:var(--ok);margin-top:1px}
+.chk li.on .box{border-color:var(--ok)}
+.chkbar{height:9px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin:8px 0 14px}
+.chkbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--cyan));transition:width .3s}
+
+.plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:12px}
+.pday{background:rgba(255,255,255,.04);border:1px solid var(--line);border-top:4px solid var(--violet);border-radius:13px;padding:13px 15px}
+.pday h4{font-size:14.5px;color:var(--violet);margin-bottom:7px}
+.pday ul{margin:0;padding-left:17px;font-size:12.8px;color:#d7deff}
+.pday li{margin-bottom:5px}
+
+footer{text-align:center;padding:26px 16px 40px;color:var(--dim);font-size:12.3px;border-top:1px solid var(--line)}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(90px);background:var(--gold);color:#13193a;
+  font-weight:800;font-size:13.5px;padding:11px 22px;border-radius:999px;box-shadow:0 8px 26px rgba(0,0,0,.5);
+  transition:transform .3s;z-index:90;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.badge{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+  background:rgba(73,214,232,.16);color:var(--cyan);border:1px solid rgba(73,214,232,.4);border-radius:999px;padding:3px 9px}
+.note{font-size:12.6px;color:var(--dim);background:rgba(255,200,61,.07);border-left:3px solid var(--gold);
+  border-radius:0 10px 10px 0;padding:9px 13px;margin:12px 0}
+.note b{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="stars" id="stars"></div>
+  <div class="planet">🌍</div>
+  <h1>Ruchy Ziemi</h1>
+  <div class="sub">Interaktywny trener do rozdziału 2. Klikaj, przesuwaj, zgaduj — i zapamiętaj wszystko bez wkuwania.</div>
+  <div class="tag">Geografia · klasa 6 · strony 21–46</div>
+  <div class="quick">
+    <div><b>24 h</b>obrót wokół osi</div>
+    <div><b>365 d 5 h 49 min</b>obieg wokół Słońca</div>
+    <div><b>66°34′</b>nachylenie osi</div>
+    <div><b>5</b>stref oświetlenia</div>
+  </div>
+</div>
+
+<nav><div class="inner">
+  <a href="#mapa">🗺️ Mapa rozdziału</a>
+  <a href="#pamiec">🧠 Mnemotechniki</a>
+  <a href="#uklad">🪐 Układ Słoneczny</a>
+  <a href="#obrot">🔄 Obrót + doba</a>
+  <a href="#gnomon">📏 Gnomon</a>
+  <a href="#czas">🕐 Strefy czasowe</a>
+  <a href="#obieg">🛰️ Obieg + pory roku</a>
+  <a href="#strefy">🌡️ Strefy oświetlenia</a>
+  <a href="#fiszki">🃏 Fiszki</a>
+  <a href="#slownik">📖 Słowniczek</a>
+  <a href="#gry">🎮 Gry</a>
+  <a href="#sprawdz">✅ Sprawdź się</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="mapa">
+  <div class="shead"><span class="ico">🗺️</span><h2>Mapa rozdziału</h2>
+    <span class="tip">cztery lekcje — kliknij „pokaż więcej”, żeby rozwinąć</span></div>
+  <div class="srule"></div>
+  <div class="topics" id="topics"></div>
+  <div class="note"><b>Zasada nr 1:</b> wszystko w tym rozdziale wynika z dwóch rzeczy — Ziemia <em>kręci się wokół własnej osi</em> (doba) i <em>krąży wokół Słońca</em> (rok), a jej oś jest <em>przechylona</em>. Zapamiętaj to, a resztę wyprowadzisz sam.</div>
+</section>
+
+<section id="pamiec">
+  <div class="shead"><span class="ico">🧠</span><h2>Mnemotechniki</h2>
+    <span class="tip">kliknij kartę — z przodu zagadka, z tyłu trik na zapamiętanie</span></div>
+  <div class="srule"></div>
+  <div class="row" style="margin-bottom:13px">
+    <button class="btn ghost sm" id="mFlipAll">Odwróć wszystkie 🔁</button>
+    <button class="btn ghost sm" id="mCloseAll">Zamknij wszystkie</button>
+  </div>
+  <div class="mgrid" id="mnem"></div>
+</section>
+
+<section id="uklad">
+  <div class="shead"><span class="ico">🪐</span><h2>Układ Słoneczny</h2>
+    <span class="tip">kliknij planetę, żeby zobaczyć jej dane</span></div>
+  <div class="srule"></div>
+  <div class="viz">
+    <h3>Osiem planet w kolejności od Słońca</h3>
+    <div class="vtip">Cztery bliżej Słońca są <em>skaliste</em>, cztery dalej — <em>gazowe</em>. Granicę tworzą planetoidy.</div>
+    <div class="vrow">
+      <div><svg id="ssSvg" viewBox="0 0 760 210" role="img" aria-label="Układ Słoneczny"></svg></div>
+      <div class="readout" id="ssInfo"></div>
+    </div>
+  </div>
+</section>
+
+<section id="obrot">
+  <div class="shead"><span class="ico">🔄</span><h2>Ruch obrotowy — skąd się bierze doba</h2>
+    <span class="tip">przesuń suwak i obserwuj, jak Warszawa wjeżdża w dzień i w noc</span></div>
+  <div class="srule"></div>
+  <div class="viz">
+    <h3>Obrotomat ⏱️</h3>
+    <div class="vtip">Ziemia obraca się <em>z zachodu na wschód</em>. Pełny obrót = 360° = 24 godziny, czyli <em>15° na godzinę</em>.</div>
+    <div class="vrow">
+      <div>
+        <svg id="rotSvg" viewBox="0 0 420 300" role="img" aria-label="Ziemia oświetlona przez Słońce"></svg>
+        <input type="range" class="slider" id="rotS" min="0" max="1439" value="720" step="5">
+        <div class="row" style="justify-content:space-between">
+          <span class="muted">00:00</span><span class="muted">06:00</span><span class="muted">12:00</span>
+          <span class="muted">18:00</span><span class="muted">24:00</span>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <button class="btn sm" id="rotPlay">▶ Animuj dobę</button>
+          <button class="btn ghost sm" data-rot="360">Wschód ok. 6:00</button>
+          <button class="btn ghost sm" data-rot="720">Górowanie 12:00</button>
+          <button class="btn ghost sm" data-rot="1080">Zachód ok. 18:00</button>
+        </div>
+      </div>
+      <div class="readout" id="rotInfo"></div>
+    </div>
+  </div>
+</section>
+
+<section id="gnomon">
+  <div class="shead"><span class="ico">📏</span><h2>Gnomon i wysokość górowania Słońca</h2>
+    <span class="tip">wybierz porę roku — cień zmieni długość na twoich oczach</span></div>
+  <div class="srule"></div>
+  <div class="viz">
+    <h3>Cień w południe słoneczne (dane dla Warszawy)</h3>
+    <div class="vtip"><em>Gnomon</em> to pionowy kij. Im wyżej Słońce nad horyzontem, tym <em>krótszy</em> cień.</div>
+    <div class="chips" id="gnChips"></div>
+    <div class="vrow">
+      <div><svg id="gnSvg" viewBox="0 0 520 300" role="img" aria-label="Cień gnomonu"></svg></div>
+      <div class="readout" id="gnInfo"></div>
+    </div>
+  </div>
+</section>
+
+<section id="czas">
+  <div class="shead"><span class="ico">🕐</span><h2>Strefy czasowe</h2>
+    <span class="tip">kliknij miasto i sprawdź, czy przesuwasz zegarek w przód, czy w tył</span></div>
+  <div class="srule"></div>
+  <div class="viz">
+    <h3>Lecisz z Warszawy do…</h3>
+    <div class="vtip">Ziemię podzielono na <em>24 strefy czasowe</em>, każda obejmuje <em>15° długości geograficznej</em>.</div>
+    <div class="chips" id="tzChips"></div>
+    <div class="vrow">
+      <div><svg id="tzSvg" viewBox="0 0 560 240" role="img" aria-label="Porównanie zegarów"></svg></div>
+      <div class="readout" id="tzInfo"></div>
+    </div>
+  </div>
+</section>
+
+<section id="obieg">
+  <div class="shead"><span class="ico">🛰️</span><h2>Ruch obiegowy i pory roku</h2>
+    <span class="tip">kliknij jedną z czterech dat na orbicie</span></div>
+  <div class="srule"></div>
+  <div class="viz">
+    <h3>Cztery przystanki na orbicie</h3>
+    <div class="vtip">Oś Ziemi jest stale nachylona pod kątem <em>66°34′</em> i zawsze wskazuje Gwiazdę Polarną — dlatego raz lepiej oświetlona jest półkula północna, a raz południowa.</div>
+    <div class="vrow">
+      <div><svg id="orbSvg" viewBox="0 0 520 348" role="img" aria-label="Orbita Ziemi i pory roku"></svg></div>
+      <div class="readout" id="orbInfo"></div>
+    </div>
+    <div class="chips" id="orbChips" style="margin-top:12px"></div>
+  </div>
+</section>
+
+<section id="strefy">
+  <div class="shead"><span class="ico">🌡️</span><h2>Pięć stref oświetlenia Ziemi</h2>
+    <span class="tip">kliknij pas na globusie albo przycisk obok</span></div>
+  <div class="srule"></div>
+  <div class="viz">
+    <h3>1 + 2 + 2 = 5</h3>
+    <div class="vtip">Jedna strefa <em>międzyzwrotnikowa</em>, dwie <em>umiarkowane</em>, dwie <em>podbiegunowe</em>.</div>
+    <div class="vrow">
+      <div><svg id="zoneSvg" viewBox="0 0 420 420" role="img" aria-label="Strefy oświetlenia Ziemi"></svg></div>
+      <div>
+        <div class="zonebtns" id="zoneBtns"></div>
+        <div class="readout" id="zoneInfo" style="margin-top:11px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="fiszki">
+  <div class="shead"><span class="ico">🃏</span><h2>Fiszki</h2>
+    <span class="tip">kliknij kartę, żeby ją odwrócić</span></div>
+  <div class="srule"></div>
+  <div class="chips" id="fcChips"></div>
+  <div class="row" style="margin-bottom:13px">
+    <button class="btn ghost sm" id="fcShuffle">Przetasuj 🔀</button>
+    <button class="btn ghost sm" id="fcClose">Zamknij wszystkie</button>
+    <span class="gcount" id="fcCount"></span>
+  </div>
+  <div class="fgrid" id="fcGrid"></div>
+</section>
+
+<section id="slownik">
+  <div class="shead"><span class="ico">📖</span><h2>Słowniczek</h2>
+    <span class="tip">zacznij pisać — lista zawęzi się sama</span></div>
+  <div class="srule"></div>
+  <div class="searchbar">
+    <input id="gq" type="text" placeholder="Szukaj hasła albo słowa w definicji…" autocomplete="off">
+    <button class="btn ghost sm" id="gClear">Wyczyść</button>
+    <span class="gcount" id="gCount"></span>
+  </div>
+  <div class="glist" id="gList"></div>
+</section>
+
+<section id="gry">
+  <div class="shead"><span class="ico">🎮</span><h2>Pięć gier treningowych</h2>
+    <span class="tip">wybierz grę i sprawdź, ile pamiętasz</span></div>
+  <div class="srule"></div>
+  <div class="chips" id="gameTabs">
+    <button class="chip on" data-g="quiz">Quiz · 24 pytania</button>
+    <button class="chip" data-g="tf">Prawda czy fałsz · 16</button>
+    <button class="chip" data-g="luki">Uzupełnij luki · 12</button>
+    <button class="chip" data-g="pary">Dopasuj pary</button>
+    <button class="chip" data-g="kolejnosc">Ustaw kolejność</button>
+  </div>
+  <div class="qbox" id="gameBox"></div>
+</section>
+
+<section id="sprawdz">
+  <div class="shead"><span class="ico">✅</span><h2>Umiem to powiedzieć na głos</h2>
+    <span class="tip">odhaczaj dopiero wtedy, gdy powiesz to bez zaglądania</span></div>
+  <div class="srule"></div>
+  <div class="qprog"><span id="chkTxt">0 / 0</span><button class="btn ghost sm" id="chkReset">Wyzeruj</button></div>
+  <div class="chkbar"><i id="chkBar"></i></div>
+  <ul class="chk" id="chkList"></ul>
+  <h3 style="font-size:18px;color:var(--violet);margin-top:30px">📅 Plan na trzy dni</h3>
+  <div class="plan" id="planBox"></div>
+</section>
+
+</div>
+
+<footer>Materiał do nauki na podstawie rozdziału 2. „Ruchy Ziemi” · geografia, klasa 6 · strony 21–46</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ DANE Z PODRĘCZNIKA ============ */
+var TOPICS=[
+{n:1,cls:"",icon:"☀️",title:"Ziemia w Układzie Słonecznym",pages:"s. 22–26",
+ intro:"Co krąży wokół Słońca i dlaczego ruch gwiazd po niebie to tylko złudzenie.",
+ must:[
+ "Dawniej ludzie sądzili, że Ziemia jest w środku wszechświata. <b>Mikołaj Kopernik</b> dowiódł, że to Ziemia i planety obiegają Słońce.",
+ "Ruch ciał niebieskich po niebie jest <b>pozorny</b> — to my się poruszamy razem z Ziemią.",
+ "<b>Układ Słoneczny</b> tworzą Słońce i krążące wokół niego ciała niebieskie.",
+ "<b>Słońce to gwiazda</b> — świeci własnym światłem powstającym w reakcjach termojądrowych. Jest ok. <b>150 mln km</b> od Ziemi.",
+ "<b>Planety nie świecą własnym światłem</b> — odbijają światło Słońca.",
+ "Wokół Słońca krąży <b>osiem planet</b> po torach zwanych <b>orbitami</b>.",
+ "<b>Planety skaliste</b> (bliżej Słońca): Merkury, Wenus, Ziemia, Mars. <b>Planety olbrzymy / gazowe</b>: Jowisz, Saturn, Uran, Neptun.",
+ "Istnieją też <b>planety karłowate</b> — największa z pięciu to <b>Pluton</b> (od 2006 r. nie jest planetą).",
+ "<b>Naturalne satelity</b> planet to księżyce. Ziemia ma jeden — <b>Księżyc</b>; obiega nas w <b>27 dni i 7 godzin</b>.",
+ "Księżyc obraca się wokół własnej osi w tym samym czasie, dlatego widzimy wciąż <b>tę samą jego półkulę</b>.",
+ "<b>Fazy Księżyca</b> to zmiany jego oświetlenia widziane z Ziemi: od <b>nowiu</b> (nie widać) do <b>pełni</b> (cała tarcza).",
+ "Małe ciała niebieskie: <b>planetoidy</b> (kilka–kilkanaście km), <b>meteory</b> (okruchy płonące w atmosferze), <b>meteoryty</b> (to, co spadnie na Ziemię), <b>komety</b> (jądro skalno-lodowe + warkocz).",
+ "<b>Kometa Halleya</b> przelatuje przez Układ Słoneczny średnio co <b>76 lat</b>."]},
+{n:2,cls:"c2",icon:"🔄",title:"Ruch obrotowy Ziemi",pages:"s. 27–33",
+ intro:"Jedna oś, jeden obrót, cztery wielkie skutki: dzień i noc, wędrówka Słońca, cień i czas.",
+ must:[
+ "<b>Ruch obrotowy</b> to obracanie się Ziemi wokół własnej osi — wyobrażonej linii przez bieguny.",
+ "Ziemia obraca się <b>z zachodu na wschód</b>. Pełny obrót o <b>360°</b> trwa <b>24 godziny</b>, czyli <b>dobę</b>.",
+ "360° ÷ 24 h = <b>15° na godzinę</b> (a 180° w 12 godzin).",
+ "Skutki ruchu obrotowego: <b>dzień i noc</b>, <b>pozorna wędrówka Słońca i gwiazd</b>, <b>różnica czasu na Ziemi</b>.",
+ "Ziemia jest kulista, więc Słońce oświetla tylko połowę: tam <b>dzień</b>, na drugiej połowie <b>noc</b>.",
+ "<b>Wschód Słońca</b> — moment, gdy Słońce pojawia się na <b>horyzoncie</b>. Promienie padają wtedy pod małym kątem, cienie są bardzo długie.",
+ "Około <b>12.00</b> Słońce <b>góruje</b> — jest najwyżej nad horyzontem. To moment <b>południa słonecznego</b> i <b>najkrótszego cienia</b>.",
+ "Im <b>wyżej</b> Słońce nad horyzontem, tym <b>większy kąt</b> padania promieni i tym <b>krótsze cienie</b>.",
+ "<b>Gnomon</b> to pionowo ustawiony kij lub słupek — służy do obserwacji wędrówki Słońca po cieniu.",
+ "Wysokość górowania Słońca w Warszawie: <b>zima 14°30′</b>, <b>wiosna i jesień 38°</b>, <b>lato 61°30′</b>.",
+ "Miejsca wschodu i zachodu Słońca na horyzoncie <b>zmieniają się w ciągu roku</b>.",
+ "<b>Czas słoneczny (miejscowy)</b> jest ten sam tylko wzdłuż jednego południka — dlatego wprowadzono strefy.",
+ "Ziemię podzielono na <b>24 strefy czasowe</b> po <b>15°</b> długości geograficznej. W obrębie strefy obowiązuje ta sama godzina.",
+ "Granice stref na lądach dopasowano do granic państw. Polska, Norwegia, Włochy, a nawet Nigeria mają tę samą godzinę.",
+ "Podróż na <b>wschód</b> → zegarki <b>w przód</b> (dodajemy). Podróż na <b>zachód</b> → zegarki <b>w tył</b> (odejmujemy).",
+ "Wzdłuż <b>południka 180°</b> biegnie umowna <b>linia zmiany daty</b>. Nie przecina lądów. Przekraczając ją na zachód — dodajemy dobę, na wschód — odejmujemy."]},
+{n:3,cls:"c3",icon:"🛰️",title:"Ruch obiegowy Ziemi",pages:"s. 34–38",
+ intro:"Rok, nachylona oś i cztery pory roku — czyli dlaczego lato jest latem.",
+ must:[
+ "<b>Ruch obiegowy</b> to krążenie Ziemi wokół Słońca po orbicie, <b>przeciwnie do ruchu wskazówek zegara</b>.",
+ "Pełny obieg trwa <b>365 dni, 5 godzin i 49 minut</b>, czyli <b>rok</b>.",
+ "Te dodatkowe ~6 godzin zbiera się przez 4 lata w jedną dobę — stąd <b>rok przestępny</b> (366 dni).",
+ "<b>Oś ziemska jest nachylona</b> do płaszczyzny orbity pod stałym kątem <b>66°34′</b> i zawsze wskazuje Gwiazdę Polarną.",
+ "Dlatego raz lepiej oświetlona jest <b>półkula północna</b>, a raz <b>południowa</b> — tak powstają <b>astronomiczne pory roku</b>.",
+ "W południe promienie padają pod kątem <b>90°</b> (Słońce w <b>zenicie</b>) tylko na czterech równoleżnikach w czterech datach.",
+ "<b>ok. 20 marca</b> — na równiku (<b>równonoc wiosenna</b>).",
+ "<b>ok. 21 czerwca</b> — na <b>zwrotniku Raka</b> (<b>przesilenie letnie</b>): u nas zaczyna się lato, na półkuli południowej zima.",
+ "<b>ok. 22 września</b> — na równiku (<b>równonoc jesienna</b>).",
+ "<b>ok. 21 grudnia</b> — na <b>zwrotniku Koziorożca</b> (<b>przesilenie zimowe</b>): u nas zima, na południu lato.",
+ "Na półkuli północnej <b>najkrótszy dzień to 21 grudnia</b>, a <b>najdłuższy to 21 czerwca</b>.",
+ "W czasie równonocy (20 III i 22 IX) dzień i noc trwają po <b>12 godzin na całej Ziemi</b>. Na równiku tak jest przez <b>cały rok</b>.",
+ "<b>Dzień polarny</b> i <b>noc polarna</b> występują w obszarach okołobiegunowych. Na biegunach trwają po <b>pół roku</b>, a na kołach podbiegunowych — <b>jedną dobę</b>.",
+ "Skutki ruchu obiegowego: zmiany oświetlenia Ziemi, astronomiczne pory roku, zmiany wysokości górowania Słońca, zmiany długości dnia i nocy."]},
+{n:4,cls:"c4",icon:"🌡️",title:"Strefy oświetlenia Ziemi",pages:"s. 39–43",
+ intro:"Pięć pasów, w których Słońce świeci zupełnie inaczej — i dlatego inaczej wygląda krajobraz.",
+ must:[
+ "Ilość otrzymywanej energii słonecznej zależy od <b>kąta padania promieni</b>, a ten zmienia się wraz z <b>szerokością geograficzną</b>.",
+ "Przy równiku promienie padają <b>stromo</b> (nawet 90°) → mała wiązka grzeje <b>mały obszar</b> → bardzo ciepło.",
+ "Przy biegunach promienie padają pod <b>bardzo małym kątem</b> → ta sama wiązka rozlewa się na <b>dwa razy większy obszar</b> → zimno.",
+ "Wyróżniamy <b>pięć stref oświetlenia</b>: <b>jedną międzyzwrotnikową</b>, <b>dwie umiarkowane</b>, <b>dwie podbiegunowe</b>.",
+ "<b>Strefa międzyzwrotnikowa</b>: między zwrotnikiem Raka (23°26′ N) a Koziorożca (23°26′ S). <b>Tylko tu</b> Słońce góruje w zenicie (90°). Dzień trwa ok. <b>12 godzin</b> przez cały rok. Otrzymuje <b>najwięcej</b> energii.",
+ "<b>Strefy umiarkowane</b>: od zwrotników do kół podbiegunowych (66°34′). Wysokość górowania zmienia się w ciągu roku — <b>latem dni długie, zimą krótkie</b>. Tu są wyraźne cztery pory roku.",
+ "<b>Strefy podbiegunowe</b>: od kół podbiegunowych (66°34′) do biegunów. Słońce góruje bardzo nisko, energii jest <b>najmniej</b>. Występują <b>dzień polarny i noc polarna</b>.",
+ "Na kołach podbiegunowych dzień i noc polarna trwają <b>24 godziny</b>; na biegunach — <b>pół roku</b>.",
+ "Zróżnicowanie oświetlenia powoduje powstanie <b>stref klimatycznych</b> i <b>stref krajobrazowych</b>.",
+ "Strefy układają się <b>równoleżnikowo</b> — pasami wzdłuż równoleżników.",
+ "Przykłady: strefa międzyzwrotnikowa → wilgotne lasy równikowe, sawanny, pustynie gorące. Strefa umiarkowana → lasy liściaste i mieszane, stepy, tajga. Strefa podbiegunowa → tundra, pustynie lodowe."]}
+];
+
+/* ============ MNEMOTECHNIKI ============ */
+var MNEM=[
+{ic:"🪐",t:"Kolejność 8 planet",q:"Merkury, Wenus, Ziemia, Mars, Jowisz, Saturn, Uran, Neptun — jak to zapamiętać?",
+ key:"„Może Wojtek Zje Małe Jabłko, Siedząc U Nogi”",
+ exp:"Weź <b>pierwsze litery</b> zdania: <b>M</b>oże&nbsp;→&nbsp;Merkury · <b>W</b>ojtek&nbsp;→&nbsp;Wenus · <b>Z</b>je&nbsp;→&nbsp;Ziemia · <b>M</b>ałe&nbsp;→&nbsp;Mars · <b>J</b>abłko&nbsp;→&nbsp;Jowisz · <b>S</b>iedząc&nbsp;→&nbsp;Saturn · <b>U</b>&nbsp;→&nbsp;Uran · <b>N</b>ogi&nbsp;→&nbsp;Neptun."},
+{ic:"🪨",t:"Skaliste czy gazowe?",q:"Które planety są skaliste, a które gazowe?",
+ key:"Skaliste = „MeWeZiMa”  ·  Gazowe = „JoSUN”",
+ exp:"<b>MeWeZiMa</b> brzmi jak „zima” — <b>Me</b>rkury, <b>We</b>nus, <b>Zi</b>emia, <b>Ma</b>rs (4 bliżej Słońca, małe i twarde). <b>JoSUN</b> — <b>Jo</b>wisz, <b>S</b>aturn, <b>U</b>ran, <b>N</b>eptun (4 dalsze olbrzymy z gazu)."},
+{ic:"🔄",t:"W którą stronę kręci się Ziemia?",q:"Z zachodu na wschód czy ze wschodu na zachód?",
+ key:"Słońce WSchodzi na WSchodzie — więc Ziemia jedzie na WSchód",
+ exp:"Ziemia obraca się <b>z zachodu na wschód</b>. Dowód masz co rano: skoro jedziemy w stronę wschodu, to właśnie tam Słońce „wyjeżdża” zza horyzontu. <b>WS–WS</b>."},
+{ic:"⏱️",t:"15° na godzinę",q:"O ile stopni Ziemia obraca się w ciągu jednej godziny?",
+ key:"360° ÷ 24 h = 15°/h",
+ exp:"Zapamiętaj trzy liczby: <b>360 – 24 – 15</b>. W <b>12 godzin</b> to połowa, czyli <b>180°</b>. 15° to też szerokość <b>jednej strefy czasowej</b> — ta sama liczba wraca!"},
+{ic:"✈️",t:"Zegarek w podróży",q:"Lecisz na wschód — przesuwasz zegarek w przód czy w tył?",
+ key:"na Wschód → w PrzóD · na Zachód → cofamy",
+ exp:"<b>W</b>schód i <b>w</b> przód zaczynają się tak samo. <b>Z</b>achód → <b>z</b>abieramy godziny (odejmujemy). Warszawa 16.00 = Nowy Jork 10.00 (zachód, minus 6) = Tokio 24.00 (wschód, plus 8)."},
+{ic:"📏",t:"Cień i wysokość Słońca",q:"Kiedy cień gnomonu jest najkrótszy?",
+ key:"Wysoko Słońce = Krótki cień (W–K, odwrotnie)",
+ exp:"Im <b>wyżej</b> Słońce nad horyzontem, tym <b>większy kąt</b> padania promieni i tym <b>krótszy</b> cień. Najkrótszy cień dnia = <b>południe słoneczne</b> (ok. 12.00), gdy Słońce <b>góruje</b>."},
+{ic:"🧭",t:"Warszawa: 14–38–61",q:"Jaka jest wysokość górowania Słońca zimą, wiosną i latem?",
+ key:"14°30′ → 38° → 61°30′",
+ exp:"Rośnie jak schodki: <b>zima 14°30′</b>, <b>wiosna i jesień 38°</b> (tyle samo!), <b>lato 61°30′</b>. Trik: <b>38 jest dokładnie w środku</b> między 14 a 61. Wiosna i jesień to bliźniaki."},
+{ic:"📐",t:"66°34′ i 23°26′",q:"Skąd się biorą te dziwne kąty?",
+ key:"66°34′ + 23°26′ = 90°",
+ exp:"<b>66°34′</b> to nachylenie osi ziemskiej i szerokość <b>kół podbiegunowych</b>. <b>23°26′</b> to szerokość <b>zwrotników</b>. Razem dają równy <b>kąt prosty</b> — jeśli pamiętasz jedną liczbę, drugą policzysz."},
+{ic:"📅",t:"Cztery daty roku",q:"20 III, 21 VI, 22 IX, 21 XII — co się wtedy dzieje?",
+ key:"20 – 21 – 22 – 21, co trzy miesiące",
+ exp:"Dni idą <b>w górę</b>: 20, 21, 22 — a potem wracają do 21. Miesiące co trzy: <b>3 · 6 · 9 · 12</b>. Marzec i wrzesień = <b>równonoce</b> (równy dzień i noc). Czerwiec i grudzień = <b>przesilenia</b> (skrajności)."},
+{ic:"🦀",t:"Rak czy Koziorożec?",q:"Który zwrotnik jest na północy?",
+ key:"Rak drapie się do góry, Kozioł schodzi w dół",
+ exp:"<b>Zwrotnik Raka</b> = <b>północ</b> (23°26′ N) — tam Słońce góruje <b>21 czerwca</b>, gdy u nas lato. <b>Zwrotnik Koziorożca</b> = <b>południe</b> (23°26′ S) — Słońce jest tam <b>21 grudnia</b>, gdy u nas zima."},
+{ic:"🌍",t:"Pięć stref oświetlenia",q:"Ile jest stref i jakie?",
+ key:"1 + 2 + 2 = 5",
+ exp:"<b>1</b> międzyzwrotnikowa (jedna, bo leży na środku i nie ma pary), <b>2</b> umiarkowane, <b>2</b> podbiegunowe. Idą symetrycznie od równika ku biegunom — jak lustro."},
+{ic:"🔦",t:"Kąt padania promieni",q:"Dlaczego przy biegunach jest zimno?",
+ key:"Latarka na wprost = jasna plama · latarka pod skosem = rozmazana",
+ exp:"Ta sama wiązka promieni pada <b>stromo</b> przy równiku i oświetla <b>mały</b> obszar (mocno grzeje), a przy biegunie pada <b>ukośnie</b> i rozlewa się na <b>dwa razy większy</b> obszar (grzeje słabo). Weź latarkę i sprawdź na ścianie!"},
+{ic:"🌗",t:"365 dni 5 godzin 49 minut",q:"Ile trwa pełny obieg Ziemi wokół Słońca?",
+ key:"365 + 5 + 49",
+ exp:"Liczby schodzą <b>od największej do najmniejszej</b>: dni <b>365</b>, godzin <b>5</b>, minut <b>49</b>. Te prawie 6 godzin przez 4 lata zbiera się w całą dobę — dlatego co 4 lata mamy <b>rok przestępny</b> (366 dni)."},
+{ic:"🌙",t:"Nów czy pełnia?",q:"Kiedy widzimy całą tarczę Księżyca?",
+ key:"Nów = Nie widać · peŁnia = caŁa tarcza",
+ exp:"<b>N</b>ów — <b>n</b>ic nie widać. <b>Pełnia</b> — widać <b>pełną</b> tarczę. Księżyc obiega Ziemię w <b>27 dni i 7 godzin</b> i tyle samo trwa jego obrót, dlatego zawsze widzimy <b>tę samą półkulę</b>."},
+{ic:"☄️",t:"Meteor czy meteoryt?",q:"Jaka jest różnica?",
+ key:"MeteoR = Rysa na niebie · MeteoryT = Trafił w Ziemię",
+ exp:"<b>Planetoida</b> krąży w kosmosie → jej okruch wpada w atmosferę i płonie jako <b>meteor</b> → jeśli <b>spadnie</b> na powierzchnię, to <b>meteoryt</b>. <b>Kometa</b> ma jądro skalno-lodowe i <b>warkocz</b>."},
+{ic:"🌐",t:"Linia zmiany daty",q:"Którędy biegnie i co się dzieje po jej przekroczeniu?",
+ key:"Południk 180° · na zachód = +1 doba, na wschód = −1 doba",
+ exp:"Biegnie wzdłuż <b>południka 180°</b>, omijając lądy i wyspy jednego państwa. Lecąc <b>na zachód</b> (np. Tokio → Los Angeles) <b>dodajesz</b> dobę, lecąc <b>na wschód</b> — <b>odejmujesz</b>. Można więc przeżyć ten sam dzień dwa razy!"}
+];
+
+/* ============ UKŁAD SŁONECZNY ============ */
+var PLANETS=[
+{n:"Merkury",c:"#b0a08c",r:7,typ:"skalista",f:["Najbliżej Słońca","Nie ma atmosfery","Brak księżyców","Najmniejsza planeta Układu"]},
+{n:"Wenus",c:"#e6c27a",r:10,typ:"skalista",f:["Rozmiarami podobna do Ziemi","Atmosfera z trującymi składnikami","Brak księżyców","Najjaśniejsza na naszym niebie"]},
+{n:"Ziemia",c:"#4a9fe0",r:10,typ:"skalista",f:["Jedyna znana planeta z życiem","Jeden księżyc — Księżyc","Obieg wokół Słońca: 365 dni 5 h 49 min","Obrót wokół osi: 24 godziny"]},
+{n:"Mars",c:"#d4694a",r:8,typ:"skalista",f:["Czerwona Planeta","Obieg wokół Słońca: prawie 2 lata","Bardzo rozrzedzona atmosfera","Dwa księżyce"]},
+{n:"Jowisz",c:"#d9a86c",r:26,typ:"gazowa",f:["Największa planeta Układu","Zbudowana głównie z gazów","Ma Wielką Czerwoną Plamę","Dziesiątki księżyców"]},
+{n:"Saturn",c:"#e3cf9a",r:23,typ:"gazowa",f:["Najpiękniejsze pierścienie z lodu i skał","Zbudowany głównie z gazów","Bardzo lekki — pływałby w wodzie","Dziesiątki księżyców"]},
+{n:"Uran",c:"#8fd7df",r:16,typ:"gazowa",f:["Obraca się „na boku”","Lodowy olbrzym","Ma cienkie pierścienie","Obieg wokół Słońca trwa 84 lata"]},
+{n:"Neptun",c:"#5a7fe0",r:15,typ:"gazowa",f:["Najdalsza planeta Układu","Najsilniejsze wiatry w Układzie","Lodowy olbrzym","Obieg wokół Słońca trwa 165 lat"]}
+];
+
+/* ============ STREFY OŚWIETLENIA ============ */
+var ZONES=[
+{id:"pn_pod",name:"Strefa podbiegunowa północna",short:"podbiegunowa",col:"#bcd8ee",lat:[66.57,90],
+ f:["Od koła podbiegunowego północnego (66°34′ N) do bieguna północnego",
+    "Słońce góruje bardzo nisko — energii dociera najmniej",
+    "Występuje dzień polarny i noc polarna",
+    "Na kole podbiegunowym trwają po 24 godziny, na biegunie — po pół roku",
+    "Krajobrazy: tundra, pustynie lodowe"]},
+{id:"pn_um",name:"Strefa umiarkowana północna",short:"umiarkowana",col:"#9ed49b",lat:[23.44,66.57],
+ f:["Od zwrotnika Raka (23°26′ N) do koła podbiegunowego północnego (66°34′ N)",
+    "Tu leży Polska",
+    "Wysokość górowania Słońca zmienia się w ciągu roku — stąd cztery wyraźne pory roku",
+    "Latem dni są długie, zimą krótkie",
+    "Krajobrazy: lasy liściaste i mieszane, stepy, tajga"]},
+{id:"miedzy",name:"Strefa międzyzwrotnikowa",short:"międzyzwrotnikowa",col:"#f3a95c",lat:[-23.44,23.44],
+ f:["Między zwrotnikiem Raka (23°26′ N) a zwrotnikiem Koziorożca (23°26′ S)",
+    "TYLKO tutaj Słońce góruje w zenicie — promienie padają pod kątem 90°",
+    "Wysokość górowania waha się od ok. 43° do 90°",
+    "Dzień trwa ok. 12 godzin przez cały rok",
+    "Otrzymuje najwięcej energii słonecznej",
+    "Krajobrazy: wilgotne lasy równikowe, sawanny, pustynie gorące"]},
+{id:"pd_um",name:"Strefa umiarkowana południowa",short:"umiarkowana",col:"#9ed49b",lat:[-66.57,-23.44],
+ f:["Od zwrotnika Koziorożca (23°26′ S) do koła podbiegunowego południowego (66°34′ S)",
+    "Lustrzane odbicie strefy północnej — pory roku są odwrócone",
+    "Gdy u nas jest zima, tam jest lato",
+    "Cztery wyraźne pory roku",
+    "Krajobrazy: stepy, lasy liściaste i mieszane"]},
+{id:"pd_pod",name:"Strefa podbiegunowa południowa",short:"podbiegunowa",col:"#bcd8ee",lat:[-90,-66.57],
+ f:["Od koła podbiegunowego południowego (66°34′ S) do bieguna południowego",
+    "Obejmuje Antarktydę",
+    "Słońce góruje bardzo nisko — energii dociera najmniej",
+    "Dzień polarny i noc polarna na przemian",
+    "Krajobrazy: pustynie lodowe"]}
+];
+
+/* ============ ORBITA / PORY ROKU ============ */
+var ORB=[
+{d:"20 marca",name:"Równonoc wiosenna",ang:180,zen:"równik (0°)",
+ pn:"początek astronomicznej WIOSNY",pd:"początek astronomicznej JESIENI",
+ f:["Promienie padają prostopadle (90°) na równiku",
+    "Dzień i noc trwają po 12 godzin na CAŁEJ Ziemi",
+    "Obie półkule są oświetlone tak samo",
+    "Na biegunie północnym zaczyna się dzień polarny"]},
+{d:"21 czerwca",name:"Przesilenie letnie",ang:270,zen:"zwrotnik Raka (23°26′ N)",
+ pn:"początek astronomicznego LATA",pd:"początek astronomicznej ZIMY",
+ f:["Promienie padają prostopadle (90°) na zwrotniku Raka",
+    "Najdłuższy dzień i najkrótsza noc na półkuli północnej",
+    "W Warszawie Słońce góruje najwyżej w roku: 61°30′",
+    "Dzień polarny sięga aż do koła podbiegunowego północnego"]},
+{d:"22 września",name:"Równonoc jesienna",ang:0,zen:"równik (0°)",
+ pn:"początek astronomicznej JESIENI",pd:"początek astronomicznej WIOSNY",
+ f:["Promienie padają prostopadle (90°) na równiku",
+    "Dzień i noc trwają po 12 godzin na CAŁEJ Ziemi",
+    "Obie półkule są oświetlone tak samo",
+    "Na biegunie północnym zaczyna się noc polarna"]},
+{d:"21 grudnia",name:"Przesilenie zimowe",ang:90,zen:"zwrotnik Koziorożca (23°26′ S)",
+ pn:"początek astronomicznej ZIMY",pd:"początek astronomicznego LATA",
+ f:["Promienie padają prostopadle (90°) na zwrotniku Koziorożca",
+    "Najkrótszy dzień i najdłuższa noc na półkuli północnej",
+    "W Warszawie Słońce góruje najniżej w roku: 14°30′",
+    "Noc polarna sięga aż do koła podbiegunowego północnego"]}
+];
+
+/* ============ GNOMON ============ */
+var GN=[
+{k:"Początek zimy",d:"21 grudnia",h:14.5,lab:"14°30′",col:"#7fb8e8"},
+{k:"Początek wiosny",d:"20 marca",h:38,lab:"38°",col:"#8fe0a6"},
+{k:"Początek lata",d:"21 czerwca",h:61.5,lab:"61°30′",col:"#ffd25e"},
+{k:"Początek jesieni",d:"22 września",h:38,lab:"38°",col:"#f0a862"}
+];
+
+/* ============ STREFY CZASOWE ============ */
+var TZ=[
+{c:"Nowy Jork",off:-6,dir:"zachód",note:"Lecąc na zachód cofamy zegarki o 6 godzin."},
+{c:"Londyn",off:-1,dir:"zachód",note:"Tuż obok nas — tylko godzina różnicy w tył."},
+{c:"Rzym",off:0,dir:"ta sama strefa",note:"Włochy są w tej samej strefie co Polska — zegarki zostawiasz w spokoju."},
+{c:"Lagos (Nigeria)",off:0,dir:"ta sama strefa",note:"Mimo że to Afryka, Nigeria ma tę samą godzinę co Polska."},
+{c:"Moskwa",off:2,dir:"wschód",note:"Lecąc na wschód przesuwamy zegarki o 2 godziny w przód."},
+{c:"Tokio",off:8,dir:"wschód",note:"Lecąc na wschód przesuwamy zegarki aż o 8 godzin w przód."}
+];
+
+/* ============ NARZĘDZIA ============ */
+function $(s){return document.querySelector(s)}
+function $$(s){return Array.prototype.slice.call(document.querySelectorAll(s))}
+function el(t,c,h){var e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e}
+function shuffle(a){a=a.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t;} return a}
+var _tt;
+function toast(m){var t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(_tt); _tt=setTimeout(function(){t.classList.remove("show")},1900)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+var SVGNS="http://www.w3.org/2000/svg";
+function svg(tag,attrs){var e=document.createElementNS(SVGNS,tag); for(var k in attrs){e.setAttribute(k,attrs[k])} return e}
+
+/* gwiazdki w nagłówku */
+(function(){var s=$("#stars"),h="";
+ for(var i=0;i<70;i++){h+='<i style="left:'+(Math.random()*100).toFixed(1)+'%;top:'+(Math.random()*100).toFixed(1)+
+   '%;animation-delay:'+(Math.random()*3).toFixed(1)+'s"></i>'}
+ s.innerHTML=h})();
+
+/* ============ CELE NAUKI + TEMATY ============ */
+(function(){
+ var box=$("#topics");
+ TOPICS.forEach(function(t){
+   var d=el("div","topic "+t.cls);
+   var head='<div class="pg">LEKCJA '+t.n+' · '+t.pages+'</div><h3>'+t.icon+" "+t.title+'</h3><div class="intro">'+t.intro+"</div>";
+   var first=t.must.slice(0,4), rest=t.must.slice(4);
+   var ul='<ul>'+first.map(function(x){return "<li>"+x+"</li>"}).join("")+"</ul>";
+   var ul2=rest.length?'<ul class="hidden">'+rest.map(function(x){return "<li>"+x+"</li>"}).join("")+"</ul>":"";
+   d.innerHTML=head+ul+ul2;
+   if(rest.length){
+     var b=el("button","more","▾ pokaż pozostałe "+rest.length);
+     b.setAttribute("aria-expanded","false");
+     b.onclick=function(){var h2=d.querySelector("ul.hidden,ul.shown");
+       var lists=d.querySelectorAll("ul"), more=lists[1];
+       var open=!more.classList.contains("hidden");
+       more.classList.toggle("hidden",open);
+       b.setAttribute("aria-expanded",String(!open));
+       b.textContent=open?("▾ pokaż pozostałe "+rest.length):"▴ zwiń";
+     };
+     d.appendChild(b);
+   }
+   box.appendChild(d);
+ });
+})();
+
+/* ============ MNEMOTECHNIKI ============ */
+(function(){
+ var box=$("#mnem");
+ MNEM.forEach(function(m,i){
+   var c=el("div","mcard");
+   c.tabIndex=0; c.setAttribute("role","button");
+   c.setAttribute("aria-label","Mnemotechnika: "+m.t+". Naciśnij, aby odwrócić kartę.");
+   c.innerHTML='<div class="in">'+
+     '<div class="f"><div class="ic">'+m.ic+'</div><div class="ti">'+m.t+'</div>'+
+       '<div style="font-size:12.8px;color:#cfd8ff">'+m.q+'</div>'+
+       '<div class="hint">kliknij, żeby zobaczyć trik 👆</div></div>'+
+     '<div class="b"><div class="key">'+m.key+'</div><div class="exp">'+m.exp+'</div></div></div>';
+   function flip(){c.classList.toggle("flip")}
+   c.onclick=flip;
+   c.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();flip()}};
+   box.appendChild(c);
+ });
+ $("#mFlipAll").onclick=function(){$$("#mnem .mcard").forEach(function(c){c.classList.add("flip")})};
+ $("#mCloseAll").onclick=function(){$$("#mnem .mcard").forEach(function(c){c.classList.remove("flip")})};
+})();
+
+/* ============ UKŁAD SŁONECZNY ============ */
+(function(){
+ var s=$("#ssSvg"), info=$("#ssInfo"), sel=2;
+ function draw(){
+   while(s.firstChild)s.removeChild(s.firstChild);
+   var g=svg("radialGradient",{id:"sunG"});
+   g.appendChild(svg("stop",{offset:"0%","stop-color":"#fff6c9"}));
+   g.appendChild(svg("stop",{offset:"60%","stop-color":"#ffc83d"}));
+   g.appendChild(svg("stop",{offset:"100%","stop-color":"#ff8a1b"}));
+   var defs=svg("defs"); defs.appendChild(g); s.appendChild(defs);
+   // Słońce
+   s.appendChild(svg("circle",{cx:26,cy:105,r:62,fill:"url(#sunG)",opacity:.95}));
+   var st=svg("text",{x:30,y:110,"font-size":"13","font-weight":"800",fill:"#7a4a00"}); st.textContent="Słońce"; s.appendChild(st);
+   // pas planetoid
+   for(var i=0;i<34;i++){
+     s.appendChild(svg("circle",{cx:352+Math.random()*26,cy:40+Math.random()*130,r:1.3,fill:"#8c97c4"}));
+   }
+   var pt=svg("text",{x:338,y:198,"font-size":"9.5",fill:"#8c97c4"}); pt.textContent="planetoidy"; s.appendChild(pt);
+   var xs=[120,180,240,300,430,530,620,700];
+   PLANETS.forEach(function(p,i){
+     var cy=105, cx=xs[i];
+     var gp=svg("g",{style:"cursor:pointer"});
+     gp.appendChild(svg("circle",{cx:cx,cy:cy,r:p.r+13,fill:"transparent"}));
+     var c=svg("circle",{cx:cx,cy:cy,r:p.r,fill:p.c,stroke:(i===sel?"#ffc83d":"rgba(255,255,255,.25)"),"stroke-width":(i===sel?3:1)});
+     gp.appendChild(c);
+     if(p.n==="Saturn"){gp.appendChild(svg("ellipse",{cx:cx,cy:cy,rx:p.r+10,ry:4,fill:"none",stroke:"#e8d9ae","stroke-width":2.2,opacity:.85}))}
+     var tx=svg("text",{x:cx,y:cy+p.r+17,"font-size":"10.5","text-anchor":"middle",fill:(i===sel?"#ffc83d":"#c3cdf0"),"font-weight":(i===sel?"800":"500")});
+     tx.textContent=p.n; gp.appendChild(tx);
+     var nu=svg("text",{x:cx,y:cy-p.r-8,"font-size":"10","text-anchor":"middle",fill:"#7f8cbb"}); nu.textContent=i+1; gp.appendChild(nu);
+     gp.onclick=function(){sel=i;draw();upd()};
+     s.appendChild(gp);
+   });
+   var l1=svg("text",{x:120,y:200,"font-size":"10.5",fill:"#ff9e7a","font-weight":"700"}); l1.textContent="◀ 4 skaliste ▶"; s.appendChild(l1);
+   var l2=svg("text",{x:470,y:200,"font-size":"10.5",fill:"#8fd7df","font-weight":"700"}); l2.textContent="◀ 4 gazowe olbrzymy ▶"; s.appendChild(l2);
+ }
+ function upd(){
+   var p=PLANETS[sel];
+   info.innerHTML='<div class="lbl">Planeta nr '+(sel+1)+'</div><div class="big">'+p.n+'</div>'+
+     '<span class="badge" style="margin-top:6px">'+p.typ+'</span><hr>'+
+     p.f.map(function(x){return '<div class="kv"><span>•&nbsp;'+x+'</span></div>'}).join("")+
+     '<hr><div class="muted">Planety nie świecą własnym światłem — odbijają światło Słońca.</div>';
+ }
+ draw();upd();
+})();
+
+/* ============ OBROTOMAT ============ */
+(function(){
+ var s=$("#rotSvg"), info=$("#rotInfo"), sl=$("#rotS"), timer=null;
+ var CX=255, CY=150, R=92;
+ function hhmm(t){var h=Math.floor(t/60),m=t%60; return (h<10?"0":"")+h+":"+(m<10?"0":"")+m}
+ function draw(){
+   var t=+sl.value, a=(t/1440)*360, ar=a*Math.PI/180;
+   var px=CX+R*Math.cos(ar), py=CY-R*Math.sin(ar);
+   while(s.firstChild)s.removeChild(s.firstChild);
+   var defs=svg("defs");
+   var g=svg("radialGradient",{id:"sg2"});
+   g.appendChild(svg("stop",{offset:"0%","stop-color":"#fff8d2"}));
+   g.appendChild(svg("stop",{offset:"100%","stop-color":"#ffae1a"}));
+   defs.appendChild(g);
+   var cp=svg("clipPath",{id:"earthClip"}); cp.appendChild(svg("circle",{cx:CX,cy:CY,r:R})); defs.appendChild(cp);
+   s.appendChild(defs);
+   // Słońce + promienie
+   s.appendChild(svg("circle",{cx:34,cy:150,r:30,fill:"url(#sg2)"}));
+   for(var i=0;i<7;i++){var y=42+i*36;
+     s.appendChild(svg("line",{x1:70,y1:y,x2:CX-R-4,y2:y,stroke:"#ffd96b","stroke-width":1.6,opacity:.45,"stroke-dasharray":"5 6"}));
+     var tri=svg("polygon",{points:(CX-R-4)+","+y+" "+(CX-R-13)+","+(y-4)+" "+(CX-R-13)+","+(y+4),fill:"#ffd96b",opacity:.5});
+     s.appendChild(tri);
+   }
+   var ts=svg("text",{x:34,y:198,"font-size":"11","text-anchor":"middle",fill:"#ffd96b","font-weight":"700"}); ts.textContent="SŁOŃCE"; s.appendChild(ts);
+   // Ziemia
+   var gE=svg("g",{"clip-path":"url(#earthClip)"});
+   gE.appendChild(svg("rect",{x:CX-R,y:CY-R,width:R,height:2*R,fill:"#2f7fc4"}));
+   gE.appendChild(svg("rect",{x:CX,y:CY-R,width:R,height:2*R,fill:"#101a3d"}));
+   gE.appendChild(svg("ellipse",{cx:CX-40,cy:CY-30,rx:30,ry:18,fill:"#4aa86a",opacity:.75}));
+   gE.appendChild(svg("ellipse",{cx:CX-25,cy:CY+42,rx:22,ry:13,fill:"#4aa86a",opacity:.7}));
+   gE.appendChild(svg("ellipse",{cx:CX+34,cy:CY-26,rx:28,ry:17,fill:"#2b3a6b",opacity:.9}));
+   s.appendChild(gE);
+   s.appendChild(svg("circle",{cx:CX,cy:CY,r:R,fill:"none",stroke:"#5f6fa8","stroke-width":1.5}));
+   s.appendChild(svg("line",{x1:CX,y1:CY-R,x2:CX,y2:CY+R,stroke:"#ffffff","stroke-width":1.4,"stroke-dasharray":"4 4",opacity:.6}));
+   var dl=svg("text",{x:CX-R/2,y:CY+R+18,"font-size":"11","text-anchor":"middle",fill:"#8fd0ff","font-weight":"700"}); dl.textContent="DZIEŃ"; s.appendChild(dl);
+   var nl=svg("text",{x:CX+R/2,y:CY+R+18,"font-size":"11","text-anchor":"middle",fill:"#9aa7d0","font-weight":"700"}); nl.textContent="NOC"; s.appendChild(nl);
+   // strzałka obrotu (przeciwnie do wskazówek = z zachodu na wschód)
+   s.appendChild(svg("path",{d:"M "+(CX+R+16)+" "+(CY-10)+" A "+(R+16)+" "+(R+16)+" 0 0 0 "+(CX+R+2)+" "+(CY-48),
+     fill:"none",stroke:"#ffc83d","stroke-width":2.4}));
+   s.appendChild(svg("polygon",{points:(CX+R+2)+","+(CY-52)+" "+(CX+R+11)+","+(CY-40)+" "+(CX+R-5)+","+(CY-40),fill:"#ffc83d"}));
+   var rl=svg("text",{x:CX+R+18,y:CY-66,"font-size":"10","text-anchor":"middle",fill:"#ffc83d"}); rl.textContent="z zachodu"; s.appendChild(rl);
+   var rl2=svg("text",{x:CX+R+18,y:CY-54,"font-size":"10","text-anchor":"middle",fill:"#ffc83d"}); rl2.textContent="na wschód"; s.appendChild(rl2);
+   // punkt Warszawa
+   s.appendChild(svg("line",{x1:CX,y1:CY,x2:px,y2:py,stroke:"#ff7ab8","stroke-width":1.2,opacity:.55,"stroke-dasharray":"3 3"}));
+   s.appendChild(svg("circle",{cx:px,cy:py,r:7,fill:"#ff4f9e",stroke:"#fff","stroke-width":2}));
+   var lx=px+(px>CX?12:-12);
+   var wl=svg("text",{x:lx,y:py+4,"font-size":"11.5","text-anchor":(px>CX?"start":"end"),fill:"#ff9ecb","font-weight":"800"});
+   wl.textContent="Warszawa"; s.appendChild(wl);
+   // biegun
+   var bp=svg("text",{x:CX,y:CY-R-8,"font-size":"10","text-anchor":"middle",fill:"#9aa7d0"});
+   bp.textContent="widok znad bieguna północnego"; s.appendChild(bp);
+   upd(t,a,px<CX);
+ }
+ function upd(t,a,lit){
+   var phase, why;
+   if(t>=350&&t<400){phase="🌅 WSCHÓD SŁOŃCA";why="Warszawa właśnie wjeżdża ze strefy nocy w strefę dnia. Słońce pojawia się na horyzoncie, promienie padają pod małym kątem — cienie są bardzo długie."}
+   else if(t>=700&&t<740){phase="☀️ GÓROWANIE (południe słoneczne)";why="Słońce jest najwyżej nad horyzontem. Kąt padania promieni jest największy, więc cień gnomonu jest <b>najkrótszy</b> w ciągu dnia."}
+   else if(t>=1060&&t<1110){phase="🌇 ZACHÓD SŁOŃCA";why="Warszawa wjeżdża w strefę nocy. Słońce chowa się za horyzontem."}
+   else if(lit){phase="🌞 DZIEŃ";why="Warszawa jest na oświetlonej przez Słońce połowie kuli ziemskiej."}
+   else {phase="🌙 NOC";why="Warszawa jest na nieoświetlonej połowie kuli ziemskiej. Słońca nie widać, ale widać gwiazdy."}
+   info.innerHTML='<div class="lbl">Czas słoneczny w Warszawie</div><div class="big">'+hhmm(+$("#rotS").value)+'</div>'+
+     '<div style="font-size:14px;font-weight:800;color:'+(lit?"#8fd0ff":"#9aa7d0")+';margin:6px 0 2px">'+phase+'</div>'+
+     '<div style="font-size:12.5px;color:#cdd6f8">'+why+'</div><hr>'+
+     '<div class="kv"><span>Ziemia obróciła się o</span><span>'+a.toFixed(0)+'°</span></div>'+
+     '<div class="kv"><span>Tempo obrotu</span><span>15° / godzinę</span></div>'+
+     '<div class="kv"><span>Pełny obrót</span><span>360° = 24 h = doba</span></div>'+
+     '<div class="kv"><span>Kierunek</span><span>z zachodu na wschód</span></div>';
+ }
+ sl.oninput=draw;
+ $$("[data-rot]").forEach(function(b){b.onclick=function(){sl.value=b.getAttribute("data-rot");draw()}});
+ $("#rotPlay").onclick=function(){
+   var b=this;
+   if(timer){clearInterval(timer);timer=null;b.textContent="▶ Animuj dobę";return}
+   b.textContent="⏸ Zatrzymaj";
+   timer=setInterval(function(){sl.value=(+sl.value+10)%1440;draw()},55);
+ };
+ draw();
+})();
+
+/* ============ GNOMON ============ */
+(function(){
+ var s=$("#gnSvg"), info=$("#gnInfo"), chips=$("#gnChips"), sel=2;
+ GN.forEach(function(g,i){
+   var b=el("button","chip"+(i===sel?" on":""),g.k+" · "+g.d);
+   b.onclick=function(){sel=i;render()};
+   chips.appendChild(b);
+ });
+ function render(){
+   $$("#gnChips .chip").forEach(function(b,i){b.classList.toggle("on",i===sel)});
+   var g=GN[sel], H=80, BX=170, GY=240;
+   var L=H/Math.tan(g.h*Math.PI/180);
+   while(s.firstChild)s.removeChild(s.firstChild);
+   // niebo
+   s.appendChild(svg("rect",{x:0,y:0,width:520,height:GY,fill:"#0c1437"}));
+   s.appendChild(svg("rect",{x:0,y:GY,width:520,height:60,fill:"#2a3a28"}));
+   s.appendChild(svg("line",{x1:0,y1:GY,x2:520,y2:GY,stroke:"#6f8a63","stroke-width":2}));
+   // łuk nieba
+   s.appendChild(svg("path",{d:"M "+(BX-150)+" "+GY+" A 150 150 0 0 1 "+(BX+150)+" "+GY,fill:"none",stroke:"#2b3a70","stroke-width":1,"stroke-dasharray":"4 5"}));
+   // Słońce na łuku
+   var hr=g.h*Math.PI/180, sx=BX-150*Math.cos(hr), sy=GY-150*Math.sin(hr);
+   s.appendChild(svg("circle",{cx:sx,cy:sy,r:26,fill:"#ffd25e",opacity:.16}));
+   s.appendChild(svg("circle",{cx:sx,cy:sy,r:17,fill:"#ffd25e"}));
+   // promień
+   s.appendChild(svg("line",{x1:sx,y1:sy,x2:BX+L,y2:GY,stroke:"#ffd96b","stroke-width":1.6,"stroke-dasharray":"6 5",opacity:.8}));
+   // kąt
+   s.appendChild(svg("path",{d:"M "+(BX+L-46)+" "+GY+" A 46 46 0 0 1 "+(BX+L-46*Math.cos(hr))+" "+(GY-46*Math.sin(hr)),
+     fill:"none",stroke:"#49d6e8","stroke-width":2}));
+   var right=(BX+L+56<512);
+   var at=svg("text",{x:(right?BX+L+8:BX+L-54),y:GY-10,"font-size":"13",fill:"#49d6e8","font-weight":"800","text-anchor":(right?"start":"end")});
+   at.textContent=g.lab; s.appendChild(at);
+   // cień
+   s.appendChild(svg("rect",{x:BX,y:GY,width:L,height:9,fill:"#000",opacity:.45}));
+   var cl=svg("text",{x:BX+L/2,y:GY+26,"font-size":"11.5","text-anchor":"middle",fill:"#b9c6ee","font-weight":"700"});
+   cl.textContent="cień: "+(L/H).toFixed(2)+" × wysokość gnomonu"; s.appendChild(cl);
+   // gnomon
+   s.appendChild(svg("rect",{x:BX-4,y:GY-H,width:8,height:H,fill:"#d8c9a8",stroke:"#8d7b55"}));
+   var gl=svg("text",{x:BX+10,y:GY-H-7,"font-size":"11","text-anchor":"start",fill:"#e8dcc0","font-weight":"700"});
+   gl.textContent="gnomon"; s.appendChild(gl);
+   var hl=svg("text",{x:12,y:22,"font-size":"13",fill:"#fff","font-weight":"800"});
+   hl.textContent=g.k+" — "+g.d+", południe słoneczne w Warszawie"; s.appendChild(hl);
+
+   var cmp = sel===0?"najdłuższy w roku":(sel===2?"najkrótszy w roku":"średni — taki sam wiosną i jesienią");
+   info.innerHTML='<div class="lbl">Wysokość górowania Słońca</div><div class="big">'+g.lab+'</div>'+
+     '<div style="font-size:12.8px;color:#cdd6f8;margin-top:6px">'+g.k+' ('+g.d+')</div><hr>'+
+     '<div class="kv"><span>Długość cienia</span><span>'+cmp+'</span></div>'+
+     '<div class="kv"><span>Kąt padania promieni</span><span>'+(sel===2?"największy":(sel===0?"najmniejszy":"średni"))+'</span></div>'+
+     '<div class="kv"><span>Energii dociera</span><span>'+(sel===2?"najwięcej":(sel===0?"najmniej":"średnio"))+'</span></div><hr>'+
+     '<div class="muted"><b style="color:#ffc83d">Zasada:</b> im wyżej Słońce nad horyzontem, tym większy kąt padania promieni i tym <b style="color:#ffc83d">krótszy</b> cień. '+
+     'Wiosną i jesienią Słońce góruje na tej samej wysokości — 38°.</div>';
+ }
+ render();
+})();
+
+/* ============ STREFY CZASOWE ============ */
+(function(){
+ var s=$("#tzSvg"), info=$("#tzInfo"), chips=$("#tzChips"), sel=5;
+ TZ.forEach(function(z,i){
+   var b=el("button","chip"+(i===sel?" on":""),z.c);
+   b.onclick=function(){sel=i;render()};
+   chips.appendChild(b);
+ });
+ function clock(cx,cy,r,h,m,col,name,time){
+   var g=svg("g");
+   g.appendChild(svg("circle",{cx:cx,cy:cy,r:r,fill:"#0b1234",stroke:col,"stroke-width":3}));
+   for(var i=0;i<12;i++){var a=(i/12)*2*Math.PI-Math.PI/2;
+     g.appendChild(svg("circle",{cx:cx+(r-9)*Math.cos(a),cy:cy+(r-9)*Math.sin(a),r:(i%3===0?2.6:1.4),fill:"#8695c9"}))}
+   var ha=((h%12)/12+m/720)*2*Math.PI-Math.PI/2, ma=(m/60)*2*Math.PI-Math.PI/2;
+   g.appendChild(svg("line",{x1:cx,y1:cy,x2:cx+(r*.5)*Math.cos(ha),y2:cy+(r*.5)*Math.sin(ha),stroke:col,"stroke-width":4,"stroke-linecap":"round"}));
+   g.appendChild(svg("line",{x1:cx,y1:cy,x2:cx+(r*.74)*Math.cos(ma),y2:cy+(r*.74)*Math.sin(ma),stroke:"#fff","stroke-width":2.4,"stroke-linecap":"round"}));
+   g.appendChild(svg("circle",{cx:cx,cy:cy,r:3.4,fill:col}));
+   var n=svg("text",{x:cx,y:cy+r+22,"font-size":"13","text-anchor":"middle",fill:"#fff","font-weight":"800"}); n.textContent=name; g.appendChild(n);
+   var t=svg("text",{x:cx,y:cy+r+40,"font-size":"17","text-anchor":"middle",fill:col,"font-weight":"800"}); t.textContent=time; g.appendChild(t);
+   return g;
+ }
+ function render(){
+   $$("#tzChips .chip").forEach(function(b,i){b.classList.toggle("on",i===sel)});
+   var z=TZ[sel], base=16, other=(base+z.off+24)%24;
+   while(s.firstChild)s.removeChild(s.firstChild);
+   s.appendChild(clock(130,95,62,16,0,"#ffc83d","Warszawa",(base<10?"0":"")+base+":00"));
+   s.appendChild(clock(430,95,62,other,0,"#49d6e8",z.c,(other<10?"0":"")+other+":00"));
+   var sign = z.off>0?"+"+z.off:(z.off<0?""+z.off:"±0");
+   var col = z.off>0?"#4ade80":(z.off<0?"#ff7ab8":"#9aa7d0");
+   s.appendChild(svg("line",{x1:206,y1:95,x2:354,y2:95,stroke:col,"stroke-width":2.5,"stroke-dasharray":"7 5"}));
+   s.appendChild(svg("polygon",{points:"362,95 348,88 348,102",fill:col}));
+   var t=svg("text",{x:280,y:80,"font-size":"20","text-anchor":"middle",fill:col,"font-weight":"800"});
+   t.textContent=sign+" h"; s.appendChild(t);
+   var t2=svg("text",{x:280,y:118,"font-size":"11.5","text-anchor":"middle",fill:col});
+   t2.textContent="kierunek: "+z.dir; s.appendChild(t2);
+   var t3=svg("text",{x:280,y:224,"font-size":"12.5","text-anchor":"middle",fill:"#b9c6ee"});
+   t3.textContent = z.off>0?"lecisz na WSCHÓD → zegarek W PRZÓD":(z.off<0?"lecisz na ZACHÓD → zegarek W TYŁ":"ta sama strefa → zegarka nie ruszasz");
+   s.appendChild(t3);
+   info.innerHTML='<div class="lbl">Warszawa → '+z.c+'</div><div class="big">'+sign+' h</div>'+
+     '<div style="font-size:12.8px;color:#cdd6f8;margin-top:7px">'+z.note+'</div><hr>'+
+     '<div class="kv"><span>Liczba stref czasowych</span><span>24</span></div>'+
+     '<div class="kv"><span>Szerokość jednej strefy</span><span>15° długości geogr.</span></div>'+
+     '<div class="kv"><span>Granice stref na lądach</span><span>dopasowane do granic państw</span></div><hr>'+
+     '<div class="muted"><b style="color:#ffc83d">Trik:</b> <b style="color:#ffc83d">W</b>schód → <b style="color:#ffc83d">w</b> przód. '+
+     '<b style="color:#ff7ab8">Z</b>achód → <b style="color:#ff7ab8">z</b>abieramy godziny.</div>';
+ }
+ render();
+})();
+
+/* ============ ORBITA I PORY ROKU ============ */
+(function(){
+ var s=$("#orbSvg"), info=$("#orbInfo"), chips=$("#orbChips"), sel=1;
+ ORB.forEach(function(o,i){
+   var b=el("button","chip"+(i===sel?" on":""),o.d+" · "+o.name);
+   b.onclick=function(){sel=i;render()};
+   chips.appendChild(b);
+ });
+ var CX=260, CY=160, RX=190, RY=112;
+ function earth(cx,cy,r,i,active){
+   var o=ORB[i], g=svg("g",{style:"cursor:pointer"});
+   g.appendChild(svg("circle",{cx:cx,cy:cy,r:r+12,fill:"transparent"}));
+   // oświetlenie: Słońce w środku, więc strona zwrócona do środka jest jasna
+   var ang=Math.atan2(CY-cy,CX-cx)*180/Math.PI;
+   var cid="ec"+i;
+   var defs=svg("defs"), cp=svg("clipPath",{id:cid});
+   cp.appendChild(svg("circle",{cx:cx,cy:cy,r:r})); defs.appendChild(cp); g.appendChild(defs);
+   var gg=svg("g",{"clip-path":"url(#"+cid+")"});
+   gg.appendChild(svg("circle",{cx:cx,cy:cy,r:r,fill:"#101a3d"}));
+   gg.appendChild(svg("rect",{x:cx-r,y:cy-r,width:r,height:2*r,fill:"#3a8ecc",transform:"rotate("+ang+" "+cx+" "+cy+")"}));
+   g.appendChild(gg);
+   g.appendChild(svg("circle",{cx:cx,cy:cy,r:r,fill:"none",stroke:(active?"#ffc83d":"#6c7ab0"),"stroke-width":(active?3:1.4)}));
+   // oś nachylona (stale w tę samą stronę: ku górze-prawo)
+   var ax=Math.sin(23.44*Math.PI/180), ay=Math.cos(23.44*Math.PI/180), L=r+9;
+   g.appendChild(svg("line",{x1:cx-ax*L,y1:cy+ay*L,x2:cx+ax*L,y2:cy-ay*L,stroke:"#ff7ab8","stroke-width":2}));
+   // równik prostopadły do osi
+   g.appendChild(svg("line",{x1:cx-ay*r,y1:cy-ax*r,x2:cx+ay*r,y2:cy+ax*r,stroke:"#fff","stroke-width":1,"stroke-dasharray":"3 3",opacity:.65}));
+   var lb=svg("text",{x:cx,y:cy+r+26,"font-size":"11","text-anchor":"middle",fill:(active?"#ffc83d":"#9aa7d0"),"font-weight":(active?"800":"600")});
+   lb.textContent=o.d; g.appendChild(lb);
+   g.onclick=function(){sel=i;render()};
+   return g;
+ }
+ function render(){
+   $$("#orbChips .chip").forEach(function(b,i){b.classList.toggle("on",i===sel)});
+   while(s.firstChild)s.removeChild(s.firstChild);
+   var defs=svg("defs"); var g=svg("radialGradient",{id:"sg3"});
+   g.appendChild(svg("stop",{offset:"0%","stop-color":"#fff8d2"}));
+   g.appendChild(svg("stop",{offset:"100%","stop-color":"#ff9e1b"}));
+   defs.appendChild(g); s.appendChild(defs);
+   s.appendChild(svg("ellipse",{cx:CX,cy:CY,rx:RX,ry:RY,fill:"none",stroke:"#3b4a86","stroke-width":1.4,"stroke-dasharray":"5 6"}));
+   s.appendChild(svg("circle",{cx:CX,cy:CY,r:30,fill:"url(#sg3)"}));
+   var st=svg("text",{x:CX,y:CY+5,"font-size":"12","text-anchor":"middle",fill:"#7a4a00","font-weight":"800"}); st.textContent="SŁOŃCE"; s.appendChild(st);
+   // kierunek obiegu: przeciwnie do wskazówek zegara
+   s.appendChild(svg("polygon",{points:(CX+RX-6)+","+(CY+16)+" "+(CX+RX+6)+","+(CY+16)+" "+(CX+RX)+","+(CY+2),fill:"#49d6e8"}));
+   var dt=svg("text",{x:10,y:18,"font-size":"10",fill:"#49d6e8"}); dt.textContent="▲ kierunek obiegu Ziemi"; s.appendChild(dt);
+   var dt2=svg("text",{x:10,y:31,"font-size":"10",fill:"#7f8cbb"}); dt2.textContent="(przeciwnie do wskazówek zegara)"; s.appendChild(dt2);
+   ORB.forEach(function(o,i){
+     var a=o.ang*Math.PI/180;
+     var x=CX+RX*Math.cos(a), y=CY-RY*Math.sin(a);
+     s.appendChild(earth(x,y,i===sel?30:22,i,i===sel));
+   });
+   var o=ORB[sel];
+   info.innerHTML='<div class="lbl">'+o.d+'</div><div class="big" style="font-size:21px">'+o.name+'</div>'+
+     '<hr><div class="kv"><span>Słońce w zenicie nad</span><span>'+o.zen+'</span></div>'+
+     '<div class="kv"><span>Półkula północna</span><span style="color:#ffc83d">'+o.pn+'</span></div>'+
+     '<div class="kv"><span>Półkula południowa</span><span style="color:#ff7ab8">'+o.pd+'</span></div><hr>'+
+     o.f.map(function(x){return '<div class="kv"><span>•&nbsp;'+x+'</span></div>'}).join("")+
+     '<hr><div class="muted">Różowa linia to <b style="color:#ff7ab8">oś ziemska</b> — zawsze nachylona tak samo (66°34′) i zawsze w tę samą stronę. To dlatego mamy pory roku.</div>';
+ }
+ render();
+})();
+
+/* ============ STREFY OŚWIETLENIA ============ */
+(function(){
+ var s=$("#zoneSvg"), info=$("#zoneInfo"), btns=$("#zoneBtns"), sel=2;
+ var CX=210, CY=210, R=168;
+ function y(lat){return CY-R*(lat/90)}
+ function render(){
+   while(s.firstChild)s.removeChild(s.firstChild);
+   var defs=svg("defs"), cp=svg("clipPath",{id:"zc"});
+   cp.appendChild(svg("circle",{cx:CX,cy:CY,r:R})); defs.appendChild(cp); s.appendChild(defs);
+   var g=svg("g",{"clip-path":"url(#zc)"});
+   ZONES.forEach(function(z,i){
+     var y1=y(z.lat[1]), y2=y(z.lat[0]);
+     var r=svg("rect",{x:CX-R,y:y1,width:2*R,height:y2-y1,fill:z.col,opacity:(i===sel?1:.74),style:"cursor:pointer"});
+     r.onclick=function(){sel=i;render()};
+     g.appendChild(r);
+     if(i===sel){
+       g.appendChild(svg("rect",{x:CX-R,y:y1+1,width:2*R,height:Math.max(0,y2-y1-2),fill:"none",stroke:"#fff","stroke-width":2.5,opacity:.9,"pointer-events":"none"}));
+     }
+   });
+   s.appendChild(g);
+   // linie
+   [[66.57,"koło podbieg. północne 66°34′"],[23.44,"zwrotnik Raka 23°26′"],[0,"RÓWNIK 0°"],
+    [-23.44,"zwrotnik Koziorożca 23°26′"],[-66.57,"koło podbieg. południowe 66°34′"]].forEach(function(p){
+     var yy=y(p[0]), hw=R*Math.sqrt(Math.max(0,1-Math.pow((yy-CY)/R,2)));
+     s.appendChild(svg("line",{x1:CX-hw,y1:yy,x2:CX+hw,y2:yy,stroke:(p[0]===0?"#1b2a4a":"#3a4a6a"),
+       "stroke-width":(p[0]===0?2:1.3),"stroke-dasharray":(p[0]===0?"":"5 4")}));
+     var t=svg("text",{x:CX,y:yy-4,"font-size":"9.5","text-anchor":"middle",fill:"#1e2a46","font-weight":(p[0]===0?"800":"600")});
+     t.textContent=p[1]; s.appendChild(t);
+   });
+   s.appendChild(svg("circle",{cx:CX,cy:CY,r:R,fill:"none",stroke:"#5f6fa8","stroke-width":2}));
+   var bn=svg("text",{x:CX,y:CY-R-10,"font-size":"11","text-anchor":"middle",fill:"#9aa7d0"}); bn.textContent="biegun północny"; s.appendChild(bn);
+   var bs=svg("text",{x:CX,y:CY+R+20,"font-size":"11","text-anchor":"middle",fill:"#9aa7d0"}); bs.textContent="biegun południowy"; s.appendChild(bs);
+   // promienie słoneczne
+   [[70,"ukośnie – zimno"],[0,"stromo – gorąco"],[-70,"ukośnie – zimno"]].forEach(function(p){
+     var yy=y(p[0]);
+     for(var k=0;k<3;k++){
+       var off=k*7-7;
+       s.appendChild(svg("line",{x1:CX-R-42,y1:yy+off*(p[0]===0?1:1.9),x2:CX-R+6,y2:yy+off,stroke:"#ffc83d","stroke-width":1.4,opacity:.8}));
+     }
+     var mid=(p[0]===0);
+     var rt=svg("text",{x:(mid?66:2),y:yy-(mid?24:16),"font-size":"9",fill:(mid?"#7a4a00":"#ffc83d"),"font-weight":"700"});
+     rt.textContent=p[1]; s.appendChild(rt);
+   });
+   btns.innerHTML="";
+   ZONES.forEach(function(z,i){
+     var b=el("button",(i===sel?"on":""),'<span class="sw" style="background:'+z.col+'"></span>'+z.name);
+     b.onclick=function(){sel=i;render()};
+     btns.appendChild(b);
+   });
+   var z=ZONES[sel];
+   info.innerHTML='<div class="lbl">Strefa oświetlenia</div><div class="big" style="font-size:19px">'+z.name+'</div><hr>'+
+     z.f.map(function(x){return '<div class="kv"><span>•&nbsp;'+x+'</span></div>'}).join("")+
+     '<hr><div class="muted"><b style="color:#ffc83d">Pamiętaj:</b> 1 międzyzwrotnikowa + 2 umiarkowane + 2 podbiegunowe = <b style="color:#ffc83d">5 stref</b>. Układają się równoleżnikowo — pasami.</div>';
+ }
+ render();
+})();
+
+/* ============ FISZKI ============ */
+var FLASH=[
+["Układ Słoneczny","Słońce i krążące wokół niego ciała niebieskie.","1. Układ Słoneczny"],
+["Dlaczego Słońce to gwiazda?","Bo świeci własnym światłem, które powstaje w reakcjach termojądrowych.","1. Układ Słoneczny"],
+["Odległość Ziemia – Słońce","Około 150 mln km.","1. Układ Słoneczny"],
+["Ile planet krąży wokół Słońca?","Osiem.","1. Układ Słoneczny"],
+["Planety skaliste","Merkury, Wenus, Ziemia, Mars (cztery najbliżej Słońca).","1. Układ Słoneczny"],
+["Planety gazowe (olbrzymy)","Jowisz, Saturn, Uran, Neptun.","1. Układ Słoneczny"],
+["Orbita","Tor, po którym planeta krąży wokół Słońca.","1. Układ Słoneczny"],
+["Dlaczego planet nie widać własnym światłem?","Planety nie świecą — odbijają światło Słońca.","1. Układ Słoneczny"],
+["Największa planeta karłowata","Pluton. Od 2006 roku nie jest zaliczany do planet.","1. Układ Słoneczny"],
+["Obieg Księżyca wokół Ziemi","27 dni i 7 godzin — tyle samo trwa jego obrót wokół osi, dlatego widzimy wciąż tę samą półkulę.","1. Układ Słoneczny"],
+["Nów i pełnia","Nów — nie widać tarczy Księżyca. Pełnia — widać całą tarczę.","1. Układ Słoneczny"],
+["Meteor a meteoryt","Meteor to okruch płonący w atmosferze. Meteoryt to ten, który spadł na powierzchnię Ziemi.","1. Układ Słoneczny"],
+["Kometa Halleya","Przelatuje przez Układ Słoneczny średnio co 76 lat.","1. Układ Słoneczny"],
+
+["Ruch obrotowy","Obracanie się Ziemi wokół własnej osi.","2. Ruch obrotowy"],
+["Kierunek obrotu Ziemi","Z zachodu na wschód.","2. Ruch obrotowy"],
+["Ile trwa pełny obrót o 360°?","24 godziny, czyli doba.","2. Ruch obrotowy"],
+["O ile stopni Ziemia obraca się w godzinę?","O 15° (360° ÷ 24 h).","2. Ruch obrotowy"],
+["Trzy skutki ruchu obrotowego","Dzień i noc, pozorna wędrówka Słońca i gwiazd, różnica czasu na Ziemi.","2. Ruch obrotowy"],
+["Dlaczego jest dzień i noc?","Ziemia jest kulista, więc Słońce oświetla tylko jej połowę, a Ziemia się obraca.","2. Ruch obrotowy"],
+["Horyzont","Wyobrażona linia oddzielająca powierzchnię Ziemi od nieba.","2. Ruch obrotowy"],
+["Górowanie Słońca","Moment, gdy Słońce jest najwyżej nad horyzontem — około 12.00, w południe słoneczne.","2. Ruch obrotowy"],
+["Kiedy cień jest najkrótszy?","W południe słoneczne, gdy Słońce góruje.","2. Ruch obrotowy"],
+["Gnomon","Pionowo ustawiony kij, pręt lub słupek do obserwacji wędrówki Słońca po długości cienia.","2. Ruch obrotowy"],
+["Górowanie Słońca w Warszawie","Zima 14°30′, wiosna i jesień 38°, lato 61°30′.","2. Ruch obrotowy"],
+["Czas słoneczny (miejscowy)","Czas, który tę samą godzinę ma tylko wzdłuż jednego południka.","2. Ruch obrotowy"],
+["Ile jest stref czasowych?","24 strefy, każda obejmuje 15° długości geograficznej.","2. Ruch obrotowy"],
+["Podróż na wschód","Przesuwamy wskazówki zegarków w przód (dodajemy czas).","2. Ruch obrotowy"],
+["Podróż na zachód","Cofamy wskazówki zegarków (odejmujemy czas).","2. Ruch obrotowy"],
+["Linia zmiany daty","Umowna linia biegnąca wzdłuż południka 180°. Nie przecina lądów.","2. Ruch obrotowy"],
+
+["Ruch obiegowy","Krążenie Ziemi wokół Słońca po orbicie, przeciwnie do ruchu wskazówek zegara.","3. Ruch obiegowy"],
+["Ile trwa pełny obieg Ziemi?","365 dni, 5 godzin i 49 minut, czyli rok.","3. Ruch obiegowy"],
+["Rok przestępny","366 dni. Dodatkowa doba zbiera się z nadmiarowych ~6 godzin przez 4 lata.","3. Ruch obiegowy"],
+["Nachylenie osi ziemskiej","Stały kąt 66°34′ do płaszczyzny orbity.","3. Ruch obiegowy"],
+["Zenit","Punkt nad głową obserwatora. Słońce w zenicie = promienie padają pod kątem 90°.","3. Ruch obiegowy"],
+["20 marca","Równonoc wiosenna. Słońce w zenicie nad równikiem.","3. Ruch obiegowy"],
+["21 czerwca","Przesilenie letnie. Słońce w zenicie nad zwrotnikiem Raka. U nas początek lata.","3. Ruch obiegowy"],
+["22 września","Równonoc jesienna. Słońce w zenicie nad równikiem.","3. Ruch obiegowy"],
+["21 grudnia","Przesilenie zimowe. Słońce w zenicie nad zwrotnikiem Koziorożca. U nas początek zimy.","3. Ruch obiegowy"],
+["Najdłuższy i najkrótszy dzień u nas","Najdłuższy 21 czerwca, najkrótszy 21 grudnia.","3. Ruch obiegowy"],
+["Kiedy dzień równa się nocy?","20 marca i 22 września — po 12 godzin na całej Ziemi. Na równiku tak jest cały rok.","3. Ruch obiegowy"],
+["Dzień polarny","Okres, gdy Słońce nie zachodzi. Na biegunie trwa pół roku, na kole podbiegunowym — jedną dobę.","3. Ruch obiegowy"],
+["Noc polarna","Okres, gdy Słońce nie wschodzi. Na biegunie trwa pół roku, na kole podbiegunowym — jedną dobę.","3. Ruch obiegowy"],
+["Cztery skutki ruchu obiegowego","Zmiany oświetlenia Ziemi, astronomiczne pory roku, zmiany wysokości górowania Słońca, zmiany długości dnia i nocy.","3. Ruch obiegowy"],
+
+["Od czego zależy ilość energii słonecznej?","Od kąta padania promieni, który zmienia się wraz z szerokością geograficzną.","4. Strefy oświetlenia"],
+["Ile jest stref oświetlenia?","Pięć: 1 międzyzwrotnikowa, 2 umiarkowane, 2 podbiegunowe.","4. Strefy oświetlenia"],
+["Strefa międzyzwrotnikowa","Między zwrotnikiem Raka a Koziorożca (23°26′). Tylko tu Słońce góruje w zenicie. Dzień ok. 12 godzin cały rok.","4. Strefy oświetlenia"],
+["Strefy umiarkowane","Od zwrotników do kół podbiegunowych (66°34′). Cztery wyraźne pory roku. Tu leży Polska.","4. Strefy oświetlenia"],
+["Strefy podbiegunowe","Od kół podbiegunowych do biegunów. Najmniej energii, dzień i noc polarna.","4. Strefy oświetlenia"],
+["Szerokość zwrotników","23°26′ (Raka na północy, Koziorożca na południu).","4. Strefy oświetlenia"],
+["Szerokość kół podbiegunowych","66°34′ — tyle samo, co nachylenie osi ziemskiej.","4. Strefy oświetlenia"],
+["Dlaczego przy biegunach jest zimno?","Promienie padają pod małym kątem, więc ta sama wiązka ogrzewa dwa razy większy obszar.","4. Strefy oświetlenia"],
+["Skutek zróżnicowania oświetlenia","Powstanie stref klimatycznych i stref krajobrazowych.","4. Strefy oświetlenia"],
+["Jak układają się strefy?","Równoleżnikowo — pasami wzdłuż równoleżników.","4. Strefy oświetlenia"],
+["Krajobrazy strefy międzyzwrotnikowej","Wilgotne lasy równikowe, sawanny, pustynie gorące.","4. Strefy oświetlenia"],
+["Krajobrazy strefy podbiegunowej","Tundra i pustynie lodowe.","4. Strefy oświetlenia"]
+];
+
+(function(){
+ var grid=$("#fcGrid"), chips=$("#fcChips"), cnt=$("#fcCount"), cur="wszystkie", data=FLASH.slice();
+ var cats=["wszystkie"]; FLASH.forEach(function(f){if(cats.indexOf(f[2])<0)cats.push(f[2])});
+ cats.forEach(function(c){
+   var b=el("button","chip"+(c===cur?" on":""),c);
+   b.onclick=function(){cur=c;$$("#fcChips .chip").forEach(function(x){x.classList.toggle("on",x.textContent===c)});render()};
+   chips.appendChild(b);
+ });
+ function render(){
+   grid.innerHTML="";
+   var list=data.filter(function(f){return cur==="wszystkie"||f[2]===cur});
+   list.forEach(function(f){
+     var c=el("div","fc"); c.tabIndex=0; c.setAttribute("role","button");
+     c.setAttribute("aria-label","Fiszka: "+f[0]+". Naciśnij, aby zobaczyć odpowiedź.");
+     c.innerHTML='<div class="in"><div class="f"><span class="cat">'+f[2]+'</span>'+esc(f[0])+'</div>'+
+       '<div class="b">'+esc(f[1])+'</div></div>';
+     function fl(){c.classList.toggle("flip")}
+     c.onclick=fl; c.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();fl()}};
+     grid.appendChild(c);
+   });
+   cnt.textContent=list.length+" fiszek";
+ }
+ $("#fcShuffle").onclick=function(){data=shuffle(data);render();toast("Przetasowane! 🔀")};
+ $("#fcClose").onclick=function(){$$("#fcGrid .fc").forEach(function(c){c.classList.remove("flip")})};
+ render();
+})();
+
+/* ============ SŁOWNICZEK ============ */
+var GLOSS=[
+["Układ Słoneczny","Słońce i krążące wokół niego ciała niebieskie: planety, planety karłowate, księżyce, planetoidy, meteory i komety."],
+["Gwiazda","Ciało niebieskie świecące własnym światłem, które powstaje w reakcjach termojądrowych. Najbliższą nam gwiazdą jest Słońce."],
+["Planeta","Duże ciało niebieskie krążące wokół gwiazdy. Nie świeci własnym światłem, lecz odbija światło Słońca."],
+["Orbita","Tor, po którym ciało niebieskie krąży wokół innego ciała."],
+["Planeta karłowata","Ciało mniejsze od planety, ale krążące po orbicie wokół Słońca. Znamy pięć; największą jest Pluton."],
+["Naturalny satelita (księżyc)","Ciało niebieskie krążące wokół planety. Ziemia ma jednego satelitę — Księżyc."],
+["Fazy Księżyca","Widoczne z Ziemi zmiany oświetlenia Księżyca: od nowiu (nie widać tarczy) do pełni (widać całą tarczę)."],
+["Planetoida","Niewielkie ciało niebieskie o średnicy od kilku do kilkunastu kilometrów, krążące wokół Słońca."],
+["Meteor","Okruch skalny, który wpadł w atmosferę ziemską i spala się w niej, dając jasną smugę na niebie."],
+["Meteoryt","Meteor, który nie spalił się całkowicie i spadł na powierzchnię Ziemi."],
+["Kometa","Ciało niebieskie zbudowane ze skalno-lodowego jądra oraz chmury gazu i pyłu tworzącej warkocz. Najbardziej znana jest Kometa Halleya (co ok. 76 lat)."],
+["Ruch pozorny","Złudzenie ruchu ciał niebieskich po niebie. W rzeczywistości to Ziemia się porusza, a my razem z nią."],
+["Mikołaj Kopernik","Polski uczony, który dowiódł, że to Ziemia i inne planety obiegają Słońce. Jego teoria stała się podstawą współczesnego myślenia o Układzie Słonecznym."],
+["Ruch obrotowy","Obracanie się Ziemi wokół własnej osi — wyobrażonej linii przechodzącej przez bieguny. Odbywa się z zachodu na wschód."],
+["Oś ziemska","Wyobrażona linia przechodząca przez oba bieguny, wokół której obraca się Ziemia. Jest nachylona pod kątem 66°34′."],
+["Doba","Czas pełnego obrotu Ziemi o 360° wokół własnej osi — 24 godziny."],
+["Horyzont","Wyobrażona linia oddzielająca powierzchnię Ziemi od nieba."],
+["Wschód Słońca","Moment, w którym Słońce pojawia się na horyzoncie, bo nasz obszar wjeżdża w strefę dnia."],
+["Zachód Słońca","Moment, w którym Słońce chowa się za horyzontem, bo nasz obszar wjeżdża w strefę nocy."],
+["Górowanie Słońca","Moment, gdy Słońce znajduje się najwyżej nad horyzontem. To południe słoneczne, około godziny 12.00."],
+["Południe słoneczne","Moment górowania Słońca. Gnomon rzuca wtedy najkrótszy cień."],
+["Gnomon","Pionowo ustawiony kij, pręt lub słupek. Po długości jego cienia można określić wysokość górowania Słońca."],
+["Gwiazda Polarna","Jedyna gwiazda, która zajmuje stałą pozycję na nocnym niebie. Oś ziemska zawsze wskazuje jej kierunek."],
+["Czas słoneczny (miejscowy)","Czas wyznaczony położeniem Słońca. Tę samą godzinę mają tylko miejscowości leżące wzdłuż jednego południka."],
+["Strefa czasowa","Jeden z 24 pasów, na które podzielono Ziemię. Każdy obejmuje 15° długości geograficznej i obowiązuje w nim ta sama godzina."],
+["Linia zmiany daty","Umowna linia biegnąca wzdłuż południka 180°. Przekraczając ją na zachód dodajemy jedną dobę, a na wschód — odejmujemy."],
+["Ruch obiegowy","Krążenie Ziemi wokół Słońca po orbicie, przeciwnie do ruchu wskazówek zegara. Trwa 365 dni, 5 godzin i 49 minut."],
+["Rok","Czas pełnego obiegu Ziemi wokół Słońca: 365 dni, 5 godzin i 49 minut."],
+["Rok przestępny","Rok liczący 366 dni. Dodatkowa doba powstaje z nadmiarowych ~6 godzin zbieranych przez cztery lata."],
+["Zenit","Punkt na niebie bezpośrednio nad głową obserwatora. Słońce w zenicie oznacza promienie padające pod kątem 90°."],
+["Równonoc","Dzień, w którym dzień i noc trwają po 12 godzin na całej Ziemi — 20 marca i 22 września."],
+["Przesilenie","Dzień najdłuższy albo najkrótszy w roku — 21 czerwca i 21 grudnia."],
+["Astronomiczne pory roku","Wiosna, lato, jesień i zima wyznaczane datami równonocy i przesileń."],
+["Zwrotnik Raka","Równoleżnik 23°26′ szerokości geograficznej północnej. Słońce góruje tam w zenicie 21 czerwca."],
+["Zwrotnik Koziorożca","Równoleżnik 23°26′ szerokości geograficznej południowej. Słońce góruje tam w zenicie 21 grudnia."],
+["Koło podbiegunowe","Równoleżnik 66°34′ szerokości geograficznej północnej lub południowej. Granica występowania dnia i nocy polarnej."],
+["Dzień polarny","Okres, w którym Słońce nie zachodzi. Na biegunie trwa pół roku, na kole podbiegunowym — jedną dobę."],
+["Noc polarna","Okres, w którym Słońce nie wschodzi. Na biegunie trwa pół roku, na kole podbiegunowym — jedną dobę."],
+["Szerokość geograficzna","Odległość kątowa od równika. Wpływa na kąt padania promieni słonecznych, a więc na ilość otrzymywanej energii."],
+["Strefy oświetlenia Ziemi","Pięć pasów o różnym kącie padania promieni: jedna międzyzwrotnikowa, dwie umiarkowane, dwie podbiegunowe."],
+["Strefa międzyzwrotnikowa","Strefa między zwrotnikami. Tylko w niej Słońce góruje w zenicie. Otrzymuje najwięcej energii, dzień trwa ok. 12 godzin przez cały rok."],
+["Strefa umiarkowana","Strefa między zwrotnikiem a kołem podbiegunowym. Wysokość górowania Słońca zmienia się w ciągu roku — stąd cztery pory roku. Tu leży Polska."],
+["Strefa podbiegunowa","Strefa od koła podbiegunowego do bieguna. Słońce góruje bardzo nisko, energii jest najmniej, występuje dzień i noc polarna."],
+["Strefy klimatyczne","Pasy o podobnym klimacie, układające się równoleżnikowo zgodnie ze strefami oświetlenia: równikowa, zwrotnikowa, podzwrotnikowa, umiarkowana, okołobiegunowa."],
+["Strefy krajobrazowe","Pasy o podobnym krajobrazie, np. wilgotne lasy równikowe, sawanny, pustynie gorące, stepy, tajga, tundra, pustynie lodowe."],
+["Równoleżnikowo","Układ pasami biegnącymi równolegle do równika."]
+];
+
+(function(){
+ var list=$("#gList"), q=$("#gq"), cnt=$("#gCount");
+ function render(){
+   var v=q.value.trim().toLowerCase();
+   list.innerHTML="";
+   var n=0;
+   GLOSS.slice().sort(function(a,b){return a[0].localeCompare(b[0],"pl")}).forEach(function(g){
+     var hay=(g[0]+" "+g[1]).toLowerCase();
+     if(v&&hay.indexOf(v)<0)return;
+     n++;
+     function hl(s){if(!v)return esc(s);
+       var i=s.toLowerCase().indexOf(v); if(i<0)return esc(s);
+       return esc(s.slice(0,i))+"<mark>"+esc(s.slice(i,i+v.length))+"</mark>"+esc(s.slice(i+v.length))}
+     list.appendChild(el("div","gitem","<h4>"+hl(g[0])+"</h4><p>"+hl(g[1])+"</p>"));
+   });
+   cnt.textContent=n+" z "+GLOSS.length+" haseł";
+   if(!n)list.appendChild(el("div","muted","Nic nie znaleziono. Spróbuj innego słowa."));
+ }
+ q.oninput=render;
+ $("#gClear").onclick=function(){q.value="";render();q.focus()};
+ render();
+})();
+
+/* ============ GRY TRENINGOWE ============ */
+var QUIZ=[
+ {q:"Ile trwa pełny obrót Ziemi wokół własnej osi?",
+  o:["24 godziny","365 dni","12 godzin","30 dni"],a:0,
+  e:"Pełny obrót wokół osi trwa <b>24 godziny</b> — to doba. Dlatego Ziemia obraca się o 15° w ciągu godziny (360° ÷ 24 = 15°).",
+  w:["","To czas <i>obiegu</i> wokół Słońca, czyli rok — nie obrotu.","12 godzin trwa mniej więcej dzień albo noc, ale nie cały obrót.","To mniej więcej miesiąc — tyle trwa obieg Księżyca wokół Ziemi."]},
+
+ {q:"W którą stronę obraca się Ziemia?",
+  o:["Z zachodu na wschód","Ze wschodu na zachód","Z północy na południe","Raz tak, raz tak"],a:0,
+  e:"Ziemia kręci się <b>z zachodu na wschód</b>. Właśnie dlatego Słońce <i>wschodzi</i> na wschodzie — tam Ziemia „podjeżdża” pod promienie najpierw.",
+  w:["","To złudzenie: tak nam się wydaje, bo widzimy wędrówkę Słońca po niebie.","Oś obrotu przechodzi przez bieguny — Ziemia nie koziołkuje.","Kierunek obrotu jest zawsze taki sam."]},
+
+ {q:"Dlaczego na Ziemi występują dzień i noc?",
+  o:["Bo Ziemia obraca się wokół własnej osi","Bo Ziemia krąży wokół Słońca","Bo Słońce gaśnie na noc","Bo Księżyc zasłania Słońce"],a:0,
+  e:"Oświetlona jest zawsze tylko połowa kuli zwrócona do Słońca. <b>Obrót</b> sprawia, że to oświetlenie się przesuwa — stąd dzień i noc.",
+  w:["","Obieg odpowiada za pory roku, a nie za dobę.","Słońce świeci cały czas — po prostu znika nam za horyzontem.","To zaćmienie Słońca — zdarza się rzadko i trwa minuty."]},
+
+ {q:"Ile stopni długości geograficznej odpowiada jednej godzinie różnicy czasu?",
+  o:["15°","24°","30°","60°"],a:0,
+  e:"<b>360° ÷ 24 h = 15°</b> na godzinę. To najważniejszy rachunek w całym rozdziale.",
+  w:["","24 to liczba godzin w dobie, nie stopni.","30° to różnica dwóch godzin.","60° to różnica czterech godzin."]},
+
+ {q:"Lecisz z Warszawy do Tokio (na wschód). Co robisz z zegarkiem?",
+  o:["Przesuwam do przodu","Przesuwam do tyłu","Nic nie zmieniam","Zatrzymuję go"],a:0,
+  e:"<b>Na wschód → w przód.</b> Tokio ma czas o 8 godzin późniejszy niż Warszawa, bo tam Słońce góruje wcześniej.",
+  w:["","Do tyłu cofamy zegarek, lecąc na zachód, np. do Nowego Jorku.","Przy różnicy aż 8 godzin trzeba zmienić czas, inaczej pomylimy dzień z nocą.","Zegarek chodzi dalej — zmieniamy tylko wskazanie."]},
+
+ {q:"Jak zmienia się długość cienia gnomonu, gdy Słońce jest coraz wyżej?",
+  o:["Cień jest coraz krótszy","Cień jest coraz dłuższy","Cień się nie zmienia","Cień znika zupełnie"],a:0,
+  e:"<b>Wysoko Słońce = krótki cień.</b> Najkrótszy cień w ciągu dnia wypada w południe słoneczne, gdy Słońce góruje.",
+  w:["","Odwrotnie: długi cień mamy rano i wieczorem, gdy Słońce jest nisko.","Cień zmienia się przez cały dzień — i długość, i kierunek.","Cień zniknąłby tylko przy Słońcu dokładnie w zenicie, a w Polsce to się nie zdarza."]},
+
+ {q:"W Polsce (ok. 52°N) w południe cień gnomonu pada w kierunku:",
+  o:["północnym","południowym","wschodnim","zachodnim"],a:0,
+  e:"W południe Słońce góruje <b>nad południową</b> stroną nieba, więc cień ucieka na <b>północ</b>. Cień zawsze pada po przeciwnej stronie niż Słońce.",
+  w:["","Tam jest Słońce, a nie cień.","Na zachód cień pada rano.","Na wschód cień pada wieczorem."]},
+
+ {q:"Ile trwa pełny obieg Ziemi dookoła Słońca?",
+  o:["365 dni 5 godzin 49 minut","365 dni równo","366 dni","24 godziny"],a:0,
+  e:"To rok astronomiczny: <b>365 dni 5 h 49 min</b>. Z tych „nadmiarowych” godzin po 4 latach zbiera się doba — stąd rok przestępny (29 lutego).",
+  w:["","Prawie, ale brakuje tych 5 godzin 49 minut — a to one dają rok przestępny.","366 dni ma rok przestępny, a nie każdy rok.","To doba, czyli czas obrotu."]},
+
+ {q:"Dlaczego mamy pory roku?",
+  o:["Bo oś Ziemi jest nachylona i Ziemia krąży wokół Słońca","Bo Ziemia raz jest bliżej, raz dalej od Słońca","Bo Słońce świeci raz mocniej, raz słabiej","Bo Ziemia obraca się wolniej zimą"],a:0,
+  e:"Decyduje <b>stałe nachylenie osi (66°34′ do płaszczyzny orbity)</b> połączone z obiegiem. Raz mocniej oświetlona jest półkula północna, pół roku później — południowa.",
+  w:["","To popularny błąd! Ziemia jest najbliżej Słońca w styczniu, czyli w naszą zimę.","Słońce świeci równo — zmienia się kąt padania promieni na Ziemię.","Prędkość obrotu jest stała przez cały rok."]},
+
+ {q:"21 grudnia na półkuli północnej jest:",
+  o:["najkrótszy dzień w roku","najdłuższy dzień w roku","dzień równy nocy","noc polarna w całej Polsce"],a:0,
+  e:"To <b>przesilenie zimowe</b> — Słońce góruje najniżej, dzień jest najkrótszy. Na półkuli południowej tego samego dnia trwa pełnia lata.",
+  w:["","Najdłuższy dzień to 21 czerwca.","Dzień równy nocy to równonoce: 20 marca i 22 września.","Noc polarna występuje tylko za kołami podbiegunowymi, nie w Polsce."]},
+
+ {q:"W dniu równonocy Słońce świeci w zenicie nad:",
+  o:["równikiem","zwrotnikiem Raka","zwrotnikiem Koziorożca","biegunem północnym"],a:0,
+  e:"W równonoce (ok. 20 III i 22 IX) promienie padają prostopadle na <b>równik</b>, a dzień i noc trwają po 12 godzin na całej Ziemi.",
+  w:["","Nad zwrotnikiem Raka Słońce jest w zenicie 21 czerwca.","Nad zwrotnikiem Koziorożca — 21 grudnia.","Nad biegunem Słońce nigdy nie jest w zenicie."]},
+
+ {q:"Ile jest stref oświetlenia Ziemi?",
+  o:["5","3","7","2"],a:0,
+  e:"<b>1 + 2 + 2 = 5</b>: jedna międzyzwrotnikowa, dwie umiarkowane i dwie podbiegunowe.",
+  w:["","3 to liczba <i>rodzajów</i> stref, ale umiarkowane i podbiegunowe występują podwójnie.","7 to liczba kontynentów, nie stref.","2 to liczba półkul."]},
+
+ {q:"W której strefie Słońce może świecić w zenicie?",
+  o:["międzyzwrotnikowej","umiarkowanej północnej","podbiegunowej południowej","w żadnej"],a:0,
+  e:"Tylko między zwrotnikami (23°26′N – 23°26′S) promienie potrafią paść <b>prostopadle</b>. To dlatego jest tam najcieplej.",
+  w:["","W Polsce Słońce najwyżej wznosi się na ok. 61°30′ — nigdy do 90°.","Tam Słońce zawsze jest nisko nad horyzontem.","W strefie międzyzwrotnikowej jak najbardziej się zdarza."]},
+
+ {q:"Dzień polarny i noc polarna występują:",
+  o:["w strefach podbiegunowych","w strefie międzyzwrotnikowej","w strefach umiarkowanych","na całej Ziemi"],a:0,
+  e:"Tylko za kołami podbiegunowymi (powyżej <b>66°34′</b>) Słońce potrafi nie zajść przez całą dobę albo nie wzejść.",
+  w:["","Tam dzień i noc trwają prawie równo przez cały rok, po ok. 12 godzin.","W strefie umiarkowanej dzień bywa długi, ale Słońce zawsze choć na chwilę zachodzi.","W większości miejsc Słońce wschodzi i zachodzi codziennie."]},
+
+ {q:"Które planety są skaliste?",
+  o:["Merkury, Wenus, Ziemia, Mars","Jowisz, Saturn, Uran, Neptun","Wszystkie osiem","Tylko Ziemia"],a:0,
+  e:"Cztery wewnętrzne: <b>MeWeZiMa</b> — Merkury, Wenus, Ziemia, Mars. Dalej, za pasem planetoid, są gazowe olbrzymy.",
+  w:["","To gazowe olbrzymy — JoSUN.","Gazowe olbrzymy nie mają stałej powierzchni.","Skaliste są cztery, nie jedna."]},
+
+ {q:"Co oddziela planety skaliste od gazowych olbrzymów?",
+  o:["pas planetoid","Księżyc","Droga Mleczna","pierścienie Saturna"],a:0,
+  e:"Między Marsem a Jowiszem krąży <b>pas planetoid</b> — tysiące skalnych okruchów.",
+  w:["","Księżyc to naturalny satelita Ziemi.","Droga Mleczna to cała nasza galaktyka.","Pierścienie otaczają samego Saturna."]},
+
+ {q:"Czym jest meteoryt?",
+  o:["okruchem skalnym, który spadł na powierzchnię Ziemi","świetlistą smugą na niebie","planetą karłowatą","gwiazdą z ogonem"],a:0,
+  e:"<b>MeteoryT = Trafił</b> w Ziemię. Sama świetlista smuga na niebie to <i>meteor</i>, czyli „spadająca gwiazda”.",
+  w:["","To meteor — smuga powstaje, gdy okruch spala się w atmosferze.","Planeta karłowata to np. Pluton.","Ogon ma kometa."]},
+
+ {q:"Dlaczego widzimy fazy Księżyca?",
+  o:["Bo Księżyc krąży wokół Ziemi i widzimy różną część jego oświetlonej połowy","Bo Ziemia zasłania Księżyc co miesiąc","Bo Księżyc sam świeci raz mocniej, raz słabiej","Bo Księżyc oddala się od Ziemi"],a:0,
+  e:"Słońce zawsze oświetla połowę Księżyca. Zmienia się tylko to, <b>jaką część tej połowy widzimy z Ziemi</b>, bo Księżyc nas okrąża.",
+  w:["","Cień Ziemi na Księżycu to zaćmienie Księżyca — zdarza się rzadko.","Księżyc nie świeci własnym światłem, tylko odbija słoneczne.","Odległość zmienia się minimalnie i nie tworzy faz."]},
+
+ {q:"Przy jakiej fazie Księżyca nie widać go wcale?",
+  o:["nów","pełnia","pierwsza kwadra","ostatnia kwadra"],a:0,
+  e:"<b>Nów = Nie widać.</b> Księżyc jest wtedy po tej samej stronie co Słońce i zwraca do nas swoją nieoświetloną stronę.",
+  w:["","PeŁnia = caŁa tarcza, czyli widać najwięcej.","W kwadrze widać połowę tarczy.","W kwadrze widać połowę tarczy."]},
+
+ {q:"Co dzieje się, gdy przekraczamy linię zmiany daty, płynąc na wschód?",
+  o:["cofamy datę o jeden dzień","przesuwamy datę o dzień do przodu","nic się nie zmienia","zmieniamy rok"],a:0,
+  e:"Linia zmiany daty biegnie mniej więcej wzdłuż południka 180°. Płynąc na <b>wschód</b>, <b>cofamy</b> datę — inaczej dzień policzylibyśmy dwa razy.",
+  w:["","Datę do przodu przesuwamy, płynąc na zachód.","Bez tej linii kalendarz na Ziemi by się rozjechał.","Zmienia się data, a rok tylko wtedy, gdy wypadnie 31 grudnia."]},
+
+ {q:"Pod jakim kątem oś Ziemi jest nachylona do płaszczyzny orbity?",
+  o:["66°34′","23°26′","90°","45°"],a:0,
+  e:"Oś tworzy z płaszczyzną orbity kąt <b>66°34′</b>. Od pionu odchyla się o 23°26′, a <b>66°34′ + 23°26′ = 90°</b>.",
+  w:["","To odchylenie osi od prostopadłej — oba wyniki są poprawne, ale pytanie dotyczy kąta z płaszczyzną orbity.","Gdyby oś była prostopadła (90°), nie byłoby pór roku.","45° nie występuje w tym temacie."]},
+
+ {q:"W Warszawie Słońce góruje najwyżej, na ok. 61°30′. Kiedy?",
+  o:["21 czerwca","21 grudnia","20 marca","22 września"],a:0,
+  e:"To <b>przesilenie letnie</b> — najwyższe górowanie, najkrótszy cień i najdłuższy dzień w roku.",
+  w:["","21 grudnia Słońce góruje najniżej, na ok. 14°30′.","W równonoce góruje na ok. 38°.","W równonoce góruje na ok. 38°."]},
+
+ {q:"Które z tych miast ma tę samą godzinę co Warszawa?",
+  o:["Rzym","Nowy Jork","Tokio","Moskwa"],a:0,
+  e:"Warszawa, Rzym, Oslo, a nawet Lagos w Afryce leżą w <b>tej samej strefie czasowej</b> — dlatego ich zegary pokazują to samo.",
+  w:["","W Nowym Jorku jest 6 godzin wcześniej niż u nas.","W Tokio jest 8 godzin później.","W Moskwie są 2 godziny później."]},
+
+ {q:"Dlaczego w strefie podbiegunowej jest zimno?",
+  o:["Bo promienie Słońca padają tam bardzo ukośnie i rozkładają się na dużej powierzchni","Bo bieguny są dalej od Słońca","Bo Słońce tam nigdy nie świeci","Bo wieje tam silny wiatr"],a:0,
+  e:"To efekt <b>kąta padania promieni</b>: ukośna wiązka rozkłada się na większej powierzchni, więc grzeje słabiej. Jak latarka świecona z ukosa.",
+  w:["","Różnica odległości jest pomijalnie mała przy 150 mln km.","Latem Słońce świeci tam nawet całą dobę — tylko bardzo nisko.","Wiatr ochładza, ale przyczyną główną jest kąt padania promieni."]}
+];
+
+var TF=[
+ ["Ziemia obraca się z zachodu na wschód.",true,"Tak — dlatego Słońce wschodzi na wschodzie."],
+ ["Pory roku powstają, bo Ziemia raz jest bliżej, a raz dalej od Słońca.",false,"Nie. Decyduje nachylenie osi. Ziemia jest najbliżej Słońca w styczniu — w naszą zimę!"],
+ ["W południe słoneczne cień gnomonu jest najkrótszy w ciągu dnia.",true,"Tak — wtedy Słońce góruje, czyli jest najwyżej."],
+ ["Planety świecą własnym światłem.",false,"Nie. Planety odbijają światło Słońca. Własnym światłem świecą gwiazdy."],
+ ["Między Marsem a Jowiszem znajduje się pas planetoid.",true,"Tak — to granica między planetami skalistymi a gazowymi olbrzymami."],
+ ["W dniu równonocy dzień i noc trwają po 12 godzin na całej Ziemi.",true,"Tak — promienie padają prostopadle na równik i oświetlenie półkul jest równe."],
+ ["Lecąc na zachód, przesuwamy zegarek do przodu.",false,"Odwrotnie: na zachód cofamy, na wschód przesuwamy w przód."],
+ ["Noc polarna może wystąpić w Warszawie.",false,"Nie. Warszawa leży na ok. 52°N, a dzień i noc polarna zaczynają się dopiero od 66°34′."],
+ ["Rok przestępny wprowadzono, bo obieg Ziemi trwa o prawie 6 godzin dłużej niż 365 dni.",true,"Tak — po 4 latach z tych godzin zbiera się doba, czyli 29 lutego."],
+ ["Słońce w Polsce bywa w zenicie w czerwcu.",false,"Nie. W zenicie Słońce bywa tylko między zwrotnikami. W Warszawie maksimum to ok. 61°30′."],
+ ["Meteor to okruch skalny, który spadł na powierzchnię Ziemi.",false,"To meteoryT — ten, który Trafił. Meteor to świetlista smuga na niebie."],
+ ["Jeden obrót Ziemi o 15° trwa godzinę.",true,"Tak: 360° ÷ 24 h = 15° na godzinę."],
+ ["21 czerwca na półkuli południowej zaczyna się lato.",false,"Nie — tam zaczyna się wtedy zima. Pory roku na półkulach są odwrotne."],
+ ["Oś Ziemi podczas obiegu zawsze jest nachylona w tę samą stronę.",true,"Tak — to stałe nachylenie sprawia, że półkule są oświetlane na przemian."],
+ ["Strefa międzyzwrotnikowa jest jedna, a umiarkowane i podbiegunowe są po dwie.",true,"Tak: 1 + 2 + 2 = 5 stref oświetlenia."],
+ ["Księżyc jest planetą.",false,"Księżyc to naturalny satelita Ziemi, a nie planeta."]
+];
+
+var GAP=[
+ ["Pełny obrót Ziemi wokół własnej osi trwa ___ godziny.","24","Doba to 24 godziny."],
+ ["Ziemia obraca się z zachodu na ___.","wschód","Dlatego Słońce wschodzi na wschodzie."],
+ ["Jednej godzinie różnicy czasu odpowiada ___ stopni długości geograficznej.","15","360 ÷ 24 = 15."],
+ ["Oś Ziemi jest nachylona do płaszczyzny orbity pod kątem 66°___′.","34","66°34′ + 23°26′ = 90°."],
+ ["Najkrótszy dzień w roku na półkuli północnej wypada ___ grudnia.","21","Przesilenie zimowe."],
+ ["Najdłuższy dzień w roku na półkuli północnej wypada ___ czerwca.","21","Przesilenie letnie."],
+ ["Stref oświetlenia Ziemi jest ___.","5","1 międzyzwrotnikowa + 2 umiarkowane + 2 podbiegunowe."],
+ ["Pas ___ oddziela planety skaliste od gazowych olbrzymów.","planetoid","Krąży między Marsem a Jowiszem."],
+ ["Im wyżej Słońce, tym cień gnomonu jest ___.","krótszy","Wysoko Słońce = krótki cień."],
+ ["Czas wyznaczony przez położenie Słońca nad daną miejscowością to czas ___.","słoneczny","Nazywany też czasem miejscowym."],
+ ["Faza, w której Księżyca nie widać, to ___.","nów","Nów = Nie widać."],
+ ["Obieg Ziemi wokół Słońca trwa 365 dni, 5 godzin i ___ minut.","49","Z tej nadwyżki powstaje rok przestępny."]
+];
+
+var PAIRS=[
+ ["Ruch obrotowy","dzień i noc"],
+ ["Ruch obiegowy","pory roku"],
+ ["21 czerwca","najdłuższy dzień"],
+ ["21 grudnia","najkrótszy dzień"],
+ ["Zwrotnik Raka","23°26′ N"],
+ ["Koło podbiegunowe","66°34′"],
+ ["Gnomon","pionowy pręt rzucający cień"],
+ ["Meteoryt","okruch, który spadł na Ziemię"],
+ ["Czas słoneczny","czas miejscowy danego południka"],
+ ["Pas planetoid","między Marsem a Jowiszem"]
+];
+
+var ORDERS=[
+ {t:"Ustaw planety w kolejności od Słońca",
+  items:["Merkury","Wenus","Ziemia","Mars","Jowisz","Saturn","Uran","Neptun"],
+  hint:"„Może Wojtek Zje Małe Jabłko, Siedząc U Nogi”"},
+ {t:"Ustaw daty w kolejności w ciągu roku",
+  items:["20 marca — równonoc wiosenna","21 czerwca — przesilenie letnie","22 września — równonoc jesienna","21 grudnia — przesilenie zimowe"],
+  hint:"20–21–22–21, co trzy miesiące"},
+ {t:"Ustaw strefy od równika w stronę bieguna",
+  items:["międzyzwrotnikowa","umiarkowana","podbiegunowa"],
+  hint:"Im dalej od równika, tym ukośniej padają promienie."},
+ {t:"Ustaw wydarzenia jednego dnia w kolejności",
+  items:["wschód Słońca","cień coraz krótszy","górowanie Słońca","cień coraz dłuższy","zachód Słońca"],
+  hint:"Najkrótszy cień wypada dokładnie w południe słoneczne."}
+];
+
+/* ---- silnik gier ---- */
+(function(){
+ var box=$("#gameBox"), tabs=$$("#gameTabs .chip");
+ var builders={quiz:buildQuiz, tf:buildTF, luki:buildGap, pary:buildPairs, kolejnosc:buildOrder};
+
+ tabs.forEach(function(c){
+   c.onclick=function(){
+     tabs.forEach(function(x){x.classList.remove("on")});
+     c.classList.add("on");
+     box.innerHTML="";
+     builders[c.getAttribute("data-g")]();
+   };
+ });
+
+ /* ===== QUIZ ===== */
+ function buildQuiz(){
+   var qs=shuffle(QUIZ), i=0, good=0, answered=false;
+   var bar=el("div","chkbar",'<i style="width:0%"></i>');
+   var host=el("div");
+   var score=el("div","score","");
+   box.appendChild(bar); box.appendChild(host); box.appendChild(score);
+
+   function render(){
+     host.innerHTML="";
+     if(i>=qs.length){
+       var pct=Math.round(good/qs.length*100);
+       var msg = pct>=90?"🏆 Mistrzostwo! Znasz ten rozdział na wylot.":
+                 pct>=70?"🌟 Bardzo dobrze! Zostało kilka szczegółów do powtórki.":
+                 pct>=50?"💪 Dobry początek. Wróć do sekcji z mnemotechnikami i spróbuj jeszcze raz.":
+                         "🔁 Spokojnie — przejrzyj fiszki i wizualizacje, potem powtórz quiz. Za drugim razem pójdzie dużo lepiej.";
+       host.appendChild(el("div","qbox",'<div class="qq">Koniec quizu!</div><div style="font-size:30px;font-weight:900;color:var(--gold);margin:8px 0">'+good+" / "+qs.length+'</div><div class="note">'+msg+"</div>"));
+       var again=el("button","btn","🔄 Zagraj jeszcze raz");
+       again.onclick=function(){i=0;good=0;qs=shuffle(QUIZ);score.textContent="";bar.querySelector("i").style.width="0%";render()};
+       host.appendChild(again);
+       return;
+     }
+     var q=qs[i];
+     var idx=q.o.map(function(_,k){return k});
+     var ord=shuffle(idx);
+     var wrap=el("div","qbox");
+     wrap.appendChild(el("div","lbl",'<span class="badge">Pytanie '+(i+1)+" z "+qs.length+"</span>"));
+     wrap.appendChild(el("div","qq",q.q));
+     var opts=el("div","opts");
+     answered=false;
+     ord.forEach(function(k){
+       var b=el("button","opt",q.o[k]);
+       b.onclick=function(){
+         if(answered)return; answered=true;
+         var correct=(k===q.a);
+         if(correct){good++; b.classList.add("ok")}
+         else{
+           b.classList.add("bad");
+           Array.prototype.slice.call(opts.children).forEach(function(ob,oi){
+             if(ord[oi]===q.a)ob.classList.add("ok");
+           });
+         }
+         var fb=el("div","fb "+(correct?"good":"bad"));
+         fb.innerHTML=(correct?"✅ <b>Dobrze!</b> ":"💡 <b>Prawidłowa odpowiedź: "+esc(q.o[q.a])+"</b>. ")+q.e+
+           (!correct&&q.w[k]?'<div class="note" style="margin-top:6px">Dlaczego nie „'+esc(q.o[k])+"”? "+q.w[k]+"</div>":"");
+         wrap.appendChild(fb);
+         var nx=el("button","btn", i+1>=qs.length?"Zobacz wynik ▸":"Następne pytanie ▸");
+         nx.onclick=function(){i++;bar.querySelector("i").style.width=(i/qs.length*100)+"%";score.textContent="Wynik: "+good+" / "+i;render()};
+         wrap.appendChild(nx);
+       };
+       opts.appendChild(b);
+     });
+     wrap.appendChild(opts);
+     host.appendChild(wrap);
+   }
+   render();
+ }
+
+ /* ===== PRAWDA / FAŁSZ ===== */
+ function buildTF(){
+   var qs=shuffle(TF), i=0, good=0;
+   var host=el("div"); var score=el("div","score","");
+   box.appendChild(host); box.appendChild(score);
+   function render(){
+     host.innerHTML="";
+     if(i>=qs.length){
+       host.appendChild(el("div","qbox",'<div class="qq">Gotowe!</div><div style="font-size:28px;font-weight:900;color:var(--gold)">'+good+" / "+qs.length+"</div>"));
+       var again=el("button","btn","🔄 Jeszcze raz");
+       again.onclick=function(){i=0;good=0;qs=shuffle(TF);score.textContent="";render()};
+       host.appendChild(again);
+       return;
+     }
+     var q=qs[i], done=false;
+     var wrap=el("div","qbox");
+     wrap.appendChild(el("div","lbl",'<span class="badge">Zdanie '+(i+1)+" z "+qs.length+"</span>"));
+     wrap.appendChild(el("div","qq",q[0]));
+     var row=el("div","chips");
+     [["✔ PRAWDA",true],["✘ FAŁSZ",false]].forEach(function(p){
+       var b=el("button","btn "+(p[1]?"":"ghost"),p[0]);
+       b.onclick=function(){
+         if(done)return; done=true;
+         var ok=(p[1]===q[1]);
+         if(ok)good++;
+         var fb=el("div","fb "+(ok?"good":"bad"));
+         fb.innerHTML=(ok?"✅ <b>Zgadza się.</b> ":"💡 <b>To zdanie jest "+(q[1]?"prawdziwe":"fałszywe")+".</b> ")+q[2];
+         wrap.appendChild(fb);
+         var nx=el("button","btn","Dalej ▸");
+         nx.onclick=function(){i++;score.textContent="Wynik: "+good+" / "+i;render()};
+         wrap.appendChild(nx);
+       };
+       row.appendChild(b);
+     });
+     wrap.appendChild(row);
+     host.appendChild(wrap);
+   }
+   render();
+ }
+
+ /* ===== UZUPEŁNIJ LUKI ===== */
+ function buildGap(){
+   box.appendChild(el("div","note","Wpisz brakujące słowo lub liczbę i naciśnij <b>Sprawdź</b> (albo Enter). Wielkość liter i polskie znaki nie mają znaczenia."));
+   var good=0, total=GAP.length, doneCount=0;
+   var score=el("div","score","Uzupełnione: 0 / "+total);
+   GAP.forEach(function(g){
+     var d=el("div","gapq");
+     var parts=g[0].split("___");
+     var line=el("div");
+     line.innerHTML=esc(parts[0]);
+     var inp=document.createElement("input");
+     inp.type="text"; inp.setAttribute("aria-label","Uzupełnij lukę");
+     var after=el("span",null,esc(parts[1]||""));
+     line.appendChild(inp); line.appendChild(after);
+     d.appendChild(line);
+     var btn=el("button","btn sm","Sprawdź");
+     var fbHost=el("div");
+     var solved=false;
+     function norm(s){return String(s).toLowerCase().replace(/[ąĄ]/g,"a").replace(/[ćĆ]/g,"c").replace(/[ęĘ]/g,"e")
+       .replace(/[łŁ]/g,"l").replace(/[ńŃ]/g,"n").replace(/[óÓ]/g,"o").replace(/[śŚ]/g,"s").replace(/[źżŹŻ]/g,"z")
+       .replace(/[^a-z0-9]/g,"")}
+     function check(){
+       if(solved)return;
+       var ok=norm(inp.value)===norm(g[1]);
+       fbHost.innerHTML="";
+       var fb=el("div","fb "+(ok?"good":"bad"));
+       if(ok){
+         solved=true; good++; doneCount++;
+         inp.disabled=true; btn.style.display="none";
+         fb.innerHTML="✅ <b>Dobrze!</b> "+g[2];
+       }else{
+         fb.innerHTML="🤔 Jeszcze nie to. Spróbuj ponownie — podpowiedź: "+g[2].replace(new RegExp(esc(g[1]),"gi"),"…");
+         var rev=el("button","btn ghost sm","Pokaż odpowiedź");
+         rev.onclick=function(){
+           if(!solved){solved=true;doneCount++;inp.value=g[1];inp.disabled=true;btn.style.display="none";
+             fbHost.innerHTML='<div class="fb good">Odpowiedź: <b>'+esc(g[1])+"</b>. "+g[2]+"</div>";
+             score.textContent="Uzupełnione: "+doneCount+" / "+total+"  ·  bez podpowiedzi: "+good;}
+         };
+         fb.appendChild(document.createElement("br"));
+         fb.appendChild(rev);
+       }
+       fbHost.appendChild(fb);
+       score.textContent="Uzupełnione: "+doneCount+" / "+total+"  ·  bez podpowiedzi: "+good;
+     }
+     btn.onclick=check;
+     inp.onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();check()}};
+     d.appendChild(btn); d.appendChild(fbHost);
+     box.appendChild(d);
+   });
+   box.appendChild(score);
+ }
+
+ /* ===== DOPASUJ PARY ===== */
+ function buildPairs(){
+   box.appendChild(el("div","note","Kliknij pojęcie po lewej, a potem pasujące wyjaśnienie po prawej. Dobre pary znikają z planszy."));
+   var set=shuffle(PAIRS).slice(0,8);
+   var left=shuffle(set.map(function(p,i){return {t:p[0],i:i}}));
+   var right=shuffle(set.map(function(p,i){return {t:p[1],i:i}}));
+   var grid=el("div","pairs");
+   var colA=el("div"), colB=el("div");
+   var selA=null, selB=null, left_=set.length;
+   var fb=el("div");
+   function mk(item,col,side){
+     var b=el("button","opt",item.t);
+     b.onclick=function(){
+       if(b.disabled)return;
+       if(side==="a"){ if(selA)selA.el.classList.remove("ok"); selA={el:b,i:item.i}; b.classList.add("ok"); }
+       else { if(selB)selB.el.classList.remove("ok"); selB={el:b,i:item.i}; b.classList.add("ok"); }
+       if(selA&&selB){
+         if(selA.i===selB.i){
+           selA.el.disabled=true; selB.el.disabled=true;
+           selA.el.style.opacity=.35; selB.el.style.opacity=.35;
+           selA.el.classList.remove("ok"); selB.el.classList.remove("ok");
+           left_--;
+           fb.innerHTML='<div class="fb good">✅ Para dopasowana! Zostało: '+left_+"</div>";
+           if(left_===0){
+             fb.innerHTML='<div class="fb good">🏆 Wszystkie pary dopasowane. Świetna robota!</div>';
+             var ag=el("button","btn","🔄 Nowy zestaw"); ag.onclick=function(){box.innerHTML="";buildPairs()};
+             fb.appendChild(ag);
+           }
+         }else{
+           var a=selA, b2=selB;
+           a.el.classList.remove("ok"); b2.el.classList.remove("ok");
+           a.el.classList.add("bad"); b2.el.classList.add("bad");
+           fb.innerHTML='<div class="fb bad">🤔 Te dwa do siebie nie pasują. Spróbuj inaczej.</div>';
+           setTimeout(function(){a.el.classList.remove("bad");b2.el.classList.remove("bad")},650);
+         }
+         selA=null; selB=null;
+       }
+     };
+     col.appendChild(b);
+   }
+   left.forEach(function(x){mk(x,colA,"a")});
+   right.forEach(function(x){mk(x,colB,"b")});
+   grid.appendChild(colA); grid.appendChild(colB);
+   box.appendChild(grid); box.appendChild(fb);
+ }
+
+ /* ===== USTAW KOLEJNOŚĆ ===== */
+ function buildOrder(){
+   box.appendChild(el("div","note","Klikaj elementy w prawidłowej kolejności. Jeśli się pomylisz, dostaniesz wskazówkę i możesz zacząć od nowa."));
+   ORDERS.forEach(function(o){
+     var d=el("div","ordbox");
+     d.appendChild(el("div","qq",o.t));
+     var pool=el("div","opts");
+     var slots=el("div","chips");
+     var fb=el("div");
+     var step=0;
+     function build(){
+       pool.innerHTML=""; slots.innerHTML=""; fb.innerHTML=""; step=0;
+       shuffle(o.items).forEach(function(t){
+         var b=el("button","opt",t);
+         b.onclick=function(){
+           if(b.disabled)return;
+           if(t===o.items[step]){
+             b.disabled=true; b.style.opacity=.3;
+             slots.appendChild(el("span","chip on",(step+1)+". "+t));
+             step++;
+             if(step===o.items.length){
+               fb.innerHTML='<div class="fb good">✅ Idealna kolejność! Zapamiętaj: '+o.hint+"</div>";
+               var ag=el("button","btn ghost sm","🔄 Jeszcze raz"); ag.onclick=build; fb.appendChild(ag);
+             }
+           }else{
+             b.classList.add("bad");
+             fb.innerHTML='<div class="fb bad">🤔 Nie ten element. Podpowiedź: '+o.hint+"</div>";
+             var rs=el("button","btn ghost sm","Zacznij od nowa"); rs.onclick=build; fb.appendChild(rs);
+             setTimeout(function(){b.classList.remove("bad")},650);
+           }
+         };
+         pool.appendChild(b);
+       });
+     }
+     build();
+     d.appendChild(slots); d.appendChild(pool); d.appendChild(fb);
+     box.appendChild(d);
+   });
+ }
+
+ buildQuiz();
+})();
+
+/* ============ UMIEM TO POWIEDZIEĆ NA GŁOS ============ */
+var CHK=[
+ ["🪐","Wymieniam osiem planet w kolejności od Słońca i wiem, które są skaliste, a które to gazowe olbrzymy."],
+ ["☄️","Tłumaczę różnicę między meteorem a meteorytem oraz czym jest pas planetoid."],
+ ["🌑","Opisuję fazy Księżyca i wyjaśniam, dlaczego je widzimy."],
+ ["🔄","Mówię, w którą stronę i jak długo Ziemia obraca się wokół osi, i co z tego wynika."],
+ ["🌗","Wyjaśniam, dlaczego występują dzień i noc."],
+ ["🕒","Liczę różnicę czasu: 360° ÷ 24 h = 15° na godzinę."],
+ ["✈️","Wiem, co robić z zegarkiem, lecąc na wschód i na zachód, i czym jest linia zmiany daty."],
+ ["📏","Opisuję, jak zmienia się cień gnomonu w ciągu dnia i w ciągu roku."],
+ ["☀️","Podaję wysokość górowania Słońca w Warszawie: 14°30′, 38°, 61°30′ — i wiem, kiedy."],
+ ["🛰️","Mówię, ile trwa obieg Ziemi wokół Słońca i skąd bierze się rok przestępny."],
+ ["📐","Podaję kąt nachylenia osi Ziemi (66°34′) i wyjaśniam, dlaczego to on odpowiada za pory roku."],
+ ["🗓️","Wymieniam cztery daty astronomiczne i opisuję, co się wtedy dzieje na obu półkulach."],
+ ["🌍","Wymieniam pięć stref oświetlenia Ziemi i podaję ich granice."],
+ ["🔦","Tłumaczę na przykładzie latarki, dlaczego przy równiku jest cieplej niż przy biegunach."],
+ ["🌞","Wyjaśniam, czym są dzień polarny i noc polarna i gdzie występują."]
+];
+
+(function(){
+ var list=$("#chkList"), bar=$("#chkBar"), txt=$("#chkTxt");
+ var state=CHK.map(function(){return false});
+ function upd(){
+   var n=state.filter(Boolean).length;
+   txt.textContent=n+" / "+CHK.length;
+   bar.style.width=(n/CHK.length*100)+"%";
+   if(n===CHK.length)toast("🏆 Cały rozdział odhaczony. Jesteś gotowy!");
+ }
+ CHK.forEach(function(c,i){
+   var li=el("li");
+   li.tabIndex=0; li.setAttribute("role","checkbox"); li.setAttribute("aria-checked","false");
+   li.innerHTML='<span class="box"></span><span>'+c[0]+" "+c[1]+"</span>";
+   function tog(){
+     state[i]=!state[i];
+     li.classList.toggle("on",state[i]);
+     li.querySelector(".box").textContent=state[i]?"✔":"";
+     li.setAttribute("aria-checked",String(state[i]));
+     upd();
+   }
+   li.onclick=tog;
+   li.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();tog()}};
+   list.appendChild(li);
+ });
+ $("#chkReset").onclick=function(){
+   state=CHK.map(function(){return false});
+   $$("#chkList li").forEach(function(li){li.classList.remove("on");li.querySelector(".box").textContent="";li.setAttribute("aria-checked","false")});
+   upd(); toast("Lista wyzerowana");
+ };
+ upd();
+})();
+
+/* ============ PLAN NA TRZY DNI ============ */
+var PLAN=[
+ {d:"Dzień 1",ic:"🚀",c:"var(--cyan)",t:"Poznaj i zrozum",
+  s:["Przeczytaj <b>cele nauki</b> z lekcji 1 i 2.",
+     "Odwróć wszystkie <b>mnemotechniki</b> i powiedz je na głos trzy razy.",
+     "Pobaw się <b>Obrotomatem</b> i <b>gnomonem</b> — przesuń suwaki od końca do końca.",
+     "Przejrzyj fiszki z kategorii <b>1</b> i <b>2</b>.",
+     "Zagraj w <b>quiz</b> raz. Wynik nie ma znaczenia — chodzi o rozpoznanie luk."]},
+ {d:"Dzień 2",ic:"🌍",c:"var(--gold)",t:"Pogłęb i poćwicz",
+  s:["Przeczytaj cele nauki z lekcji <b>3</b> i <b>4</b>.",
+     "Kliknij wszystkie cztery pozycje na <b>orbicie</b> i wszystkie pięć <b>stref oświetlenia</b>.",
+     "Przejrzyj fiszki z kategorii <b>3</b> i <b>4</b>.",
+     "Zagraj w <b>Prawdę/Fałsz</b> i <b>Uzupełnij luki</b>.",
+     "Zajrzyj do <b>słowniczka</b> i sprawdź pięć haseł, których nie pamiętasz."]},
+ {d:"Dzień 3",ic:"🏁",c:"var(--green)",t:"Sprawdź się",
+  s:["Zagraj w <b>quiz</b> jeszcze raz — tym razem celuj w 90%.",
+     "Przejdź <b>Dopasuj pary</b> i <b>Ustaw kolejność</b> bez podpowiedzi.",
+     "Powtórz mnemotechniki z pamięci, zanim odwrócisz kartę.",
+     "Przejdź całą listę <b>„Umiem to powiedzieć na głos”</b>.",
+     "Czego nie odhaczyłeś — wróć do tej sekcji i powtórz jeszcze dziś."]}
+];
+
+(function(){
+ var box=$("#planBox");
+ PLAN.forEach(function(p){
+   var d=el("div","pday");
+   d.style.borderTopColor=p.c;
+   d.innerHTML='<h4 style="color:'+p.c+'">'+p.ic+" "+p.d+" · "+p.t+"</h4>"+
+     "<ul>"+p.s.map(function(s){return "<li>"+s+"</li>"}).join("")+"</ul>";
+   box.appendChild(d);
+ });
+})();
+
+/* ============ NAWIGACJA: podświetlanie aktywnej sekcji ============ */
+(function(){
+ var links=$$("nav a"), secs=links.map(function(a){return document.querySelector(a.getAttribute("href"))});
+ function onScroll(){
+   var y=window.scrollY+140, act=0;
+   secs.forEach(function(s,i){if(s&&s.offsetTop<=y)act=i});
+   links.forEach(function(a,i){a.classList.toggle("on",i===act)});
+ }
+ window.addEventListener("scroll",onScroll,{passive:true});
+ onScroll();
+})();
+
+/* powitanie */
+setTimeout(function(){toast("Kliknij kartę, planetę albo strefę — wszystko tu jest klikalne 👆")},900);
+</script>
+</body>
+</html>
